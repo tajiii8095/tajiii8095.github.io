@@ -88,16 +88,8 @@ footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1r
    versions: prvá je najnovšia, ostatné idú do archívu
    url: odkaz na súbor v GitHub Releases ("#" = zatiaľ nič) */
 const MODS = [
-  {game:"minecraft", name:"FM/AM Radio", desc:"Rádio vysielač, veža, kotviace laná a antény.", mc:"Fabric 26.2",
-   versions:[{v:"1.0.0", date:"2026-11-09", note:"Prvé vydanie", url:"#"}]},
-  {game:"minecraft", name:"IPTV", desc:"Analógové a DVB-T vysielače a televízory.", mc:"Fabric",
-   versions:[{v:"0.1.0", date:"2026-11-13", note:"Testovacia verzia", url:"#"}]},
-  {game:"minecraft", name:"Kingdoms", desc:"Hrady a kráľovstvá vo svete.", mc:"Fabric",
-   versions:[{v:"0.2.0", date:"2026-11-12", note:"Viac typov hradov", url:"#"},
-             {v:"0.1.0", date:"2026-11-10", note:"Prvá verzia", url:"#"}]},
-  {game:"ets2", name:"Ukážkový ETS2 mod", desc:"Sem napíš popis svojho ETS2 modu.", mc:"ETS2 1.5x",
-   versions:[{v:"1.1", date:"2026-11-01", note:"Oprava textúr", url:"#"},
-             {v:"1.0", date:"2026-10-15", note:"Prvé vydanie", url:"#"}]}
+  {game:"minecraft", name:"TV Radio", desc:"Rádio a televízne vysielanie v Minecrafte: vysielače, veže, antény a televízory.", mc:"Fabric 26.2",
+   versions:[{v:"1.0.0", date:"2026-11-14", note:"Prvé vydanie", url:"#"}]}
 ];
 const GAMES = {minecraft:"⛏️ Minecraft", ets2:"🚛 Euro Truck Simulator 2"};
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));

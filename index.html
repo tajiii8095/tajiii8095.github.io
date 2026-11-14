@@ -105,6 +105,7 @@ body.detail-open .hero,body.detail-open #mody,body.detail-open .about{display:no
 .lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:999px;width:46px;height:46px;font-size:1.5rem;cursor:pointer}
 .lb button:hover{background:var(--purple)}
 .lb .x{top:1rem;right:1rem}.lb .p{left:1rem;top:50%}.lb .n{right:1rem;top:50%}
+.dc{margin:1rem 0 .6rem}.dcbtn{display:inline-block;padding:.7rem 1.6rem}.dcnick{margin:0}
 footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1rem 2rem;font-size:.85rem;border-top:1px solid #26262f}
 </style>
 </head>
@@ -134,6 +135,8 @@ footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1r
 <div class="about" id="kontakt"><div class="in">
   <h2 data-i="contact"></h2>
   <p data-i="contactP"></p>
+  <p class="dc"><a class="btn dcbtn" href="https://discord.gg/YTh3HkXet" target="_blank" rel="noopener noreferrer">💬 <span data-i="dcServer"></span></a></p>
+  <p class="dcnick"><span data-i="dcNick"></span>: <strong>tajiii8095</strong></p>
 </div></div>
 
 <div id="detail">
@@ -195,7 +198,7 @@ const TX = {
       hero:"Mody pre <em>Minecraft</em><br>a <em>Euro Truck Simulator 2</em>",
       heroP:"Vlastné projekty, opravy a doplnky. Najnovšie verzie a archív všetkých starších vydaní na jednom mieste.",
       cta:"Prezrieť mody",sub:"Vyber hru a stiahni si najnovšiu verziu alebo niektorú zo starších v archíve.",all:"Všetko",
-      contactP:"Nápad, chyba alebo otázka k modu? Napíš sem svoj Discord, e-mail alebo odkaz na YouTube.",
+      contactP:"Nápad, chyba alebo otázka k modu? Pripoj sa na Discord server alebo mi napíš priamo.",dcServer:"Discord server",dcNick:"Môj Discord nick",
       foot:"Nezávislé mody. Minecraft a Euro Truck Simulator 2 sú ochranné známky ich vlastníkov.",
       dl:"Stiahnuť",dlv:"Stiahnuť v",arch:"Archív",archEmpty:"Archív (prázdny)",noOld:"Zatiaľ nie sú staršie verzie.",
       ver:"Verzia",date:"Dátum",na:"Zatiaľ nie je dostupná",none:"Zatiaľ žiadne mody.",load:"Načítavam…",
@@ -205,7 +208,7 @@ const TX = {
       hero:"Mods for <em>Minecraft</em><br>and <em>Euro Truck Simulator 2</em>",
       heroP:"Original projects, fixes and add-ons. The latest versions and an archive of all older releases in one place.",
       cta:"Browse mods",sub:"Pick a game and download the latest version or any older one from the archive.",all:"All",
-      contactP:"Got an idea, a bug or a question about a mod? Put your Discord, e-mail or YouTube link here.",
+      contactP:"Got an idea, a bug or a question about a mod? Join the Discord server or message me directly.",dcServer:"Discord server",dcNick:"My Discord nick",
       foot:"Independent mods. Minecraft and Euro Truck Simulator 2 are trademarks of their respective owners.",
       dl:"Download",dlv:"Download v",arch:"Archive",archEmpty:"Archive (empty)",noOld:"No older versions yet.",
       ver:"Version",date:"Date",na:"Not available yet",none:"No mods yet.",load:"Loading…",
@@ -306,12 +309,12 @@ async function loadReadme(m){
   const token = ++readmeToken;
   box.innerHTML = `<p class="sub">${t("load")}</p>`;
   try {
-    const r = await fetch(url, {cache:"no-cache"}); if (!r.ok) throw 0;
+    const r = await fetch(url, {cache:"no-cache"}); if (!r.ok) throw new Error("HTTP "+r.status);
     const txt = await r.text();
     if (token !== readmeToken) return;
     box.innerHTML = mdToHtml(txt);
     fixMd(box, new URL(url, location.href));
-  } catch(e){ if (token === readmeToken) box.innerHTML = `<p class="sub">${t("readmeErr")}</p>`; }
+  } catch(e){ if (token === readmeToken) box.innerHTML = `<p class="sub">${t("readmeErr")}<br><small>${esc(url)} — ${esc(e && e.message || e)}</small></p>`; }
 }
 
 /* ---------- galéria ---------- */

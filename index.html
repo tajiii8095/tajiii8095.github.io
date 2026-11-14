@@ -52,6 +52,59 @@ td a{color:var(--purple);font-weight:600}
 .about{background:var(--black);color:#fff}
 .about .in{max-width:1060px;margin:0 auto;padding:3rem 1.2rem}
 .about p{color:#b9b9c8;max-width:640px}
+
+/* ---- karta: náhľad + detail ---- */
+.thumb{display:block;margin:-1.3rem -1.3rem 1rem;border-radius:14px 14px 0 0;overflow:hidden;aspect-ratio:16/9;background:var(--soft)}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s}
+.card:hover .thumb img{transform:scale(1.04)}
+.btn.ghost{background:#fff;color:var(--ink);border:1.5px solid var(--ink);margin-top:.55rem}
+.btn.ghost:hover{background:var(--soft);color:var(--purple);border-color:var(--purple)}
+#detail{display:none;max-width:1060px;margin:0 auto;padding:1.6rem 1.2rem 3rem}
+body.detail-open #detail{display:block}
+body.detail-open .hero,body.detail-open #mody,body.detail-open .about{display:none}
+.back{display:inline-block;margin-bottom:1rem;color:var(--purple);font-weight:600;text-decoration:none}
+.back:hover{text-decoration:underline}
+.dhead{display:flex;gap:1.2rem;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;margin-bottom:1.4rem}
+.dhead h1{margin:0 0 .5rem;font-size:clamp(1.7rem,4.5vw,2.4rem);letter-spacing:-.5px}
+.dhead .btn{padding:.75rem 1.6rem}
+.dl-box{min-width:230px}
+.dl-box details{margin-top:.6rem}
+.sec-title{font-size:1.25rem;font-weight:700;margin:2rem 0 .8rem;display:flex;align-items:center;gap:.6rem}
+.sec-title::after{content:"";flex:1;height:2px;background:var(--line)}
+.gal-main{display:block;width:100%;padding:0;border:1.5px solid var(--line);border-radius:16px;overflow:hidden;background:var(--soft);cursor:zoom-in;aspect-ratio:16/9}
+.gal-main img{width:100%;height:100%;object-fit:contain;display:block;background:#0e0e12}
+.gal-cap{color:var(--muted);font-size:.9rem;margin:.5rem .2rem 0;min-height:1.3em}
+.gal-thumbs{display:flex;gap:.6rem;margin-top:.7rem;overflow-x:auto;padding-bottom:.4rem}
+.gal-thumbs button{flex:0 0 auto;width:110px;aspect-ratio:16/10;padding:0;border:2px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;background:#0e0e12;opacity:.75}
+.gal-thumbs button.on{border-color:var(--purple);opacity:1}
+.gal-thumbs button:hover{opacity:1}
+.gal-thumbs img{width:100%;height:100%;object-fit:cover;display:block}
+.md{overflow-wrap:anywhere}
+.md h1{font-size:1.9rem;letter-spacing:-.5px;margin:1.6rem 0 .6rem}
+.md h2{font-size:1.5rem;margin:2.2rem 0 .6rem;padding-bottom:.3rem;border-bottom:2px solid var(--line)}
+.md h3{font-size:1.2rem;margin:1.6rem 0 .4rem}
+.md h4{font-size:1.05rem;margin:1.2rem 0 .3rem}
+.md p,.md li{color:#33333f}
+.md li{margin:.25rem 0}
+.md a{color:var(--purple);font-weight:600}
+.md img{max-width:100%;height:auto;border-radius:10px;border:1px solid var(--line);margin:.4rem 0}
+.md code{background:var(--soft);color:#5b21b6;padding:.1rem .4rem;border-radius:6px;font-size:.88em}
+.md pre{background:var(--black);color:#e8e8f2;padding:1rem;border-radius:12px;overflow-x:auto}
+.md pre code{background:none;color:inherit;padding:0}
+.md blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:4px solid var(--purple);background:var(--soft);border-radius:0 10px 10px 0}
+.md blockquote p{margin:.3rem 0}
+.md hr{border:0;height:2px;background:var(--line);margin:2rem 0}
+.md .tw{overflow-x:auto;margin:.8rem 0}
+.md table{font-size:.9rem;min-width:420px}
+.md th,.md td{padding:.5rem .6rem;vertical-align:top}
+.md th{background:var(--soft);color:var(--ink);font-weight:600}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(14,14,18,.94);display:none;align-items:center;justify-content:center;flex-direction:column;padding:1rem}
+.lb.open{display:flex}
+.lb img{max-width:96vw;max-height:80vh;object-fit:contain;border-radius:8px}
+.lb .cap{color:#d8d8e6;margin-top:.8rem;text-align:center;max-width:90vw}
+.lb button{position:absolute;background:rgba(255,255,255,.12);color:#fff;border:0;border-radius:999px;width:46px;height:46px;font-size:1.5rem;cursor:pointer}
+.lb button:hover{background:var(--purple)}
+.lb .x{top:1rem;right:1rem}.lb .p{left:1rem;top:50%}.lb .n{right:1rem;top:50%}
 footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1rem 2rem;font-size:.85rem;border-top:1px solid #26262f}
 </style>
 </head>
@@ -83,7 +136,22 @@ footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1r
   <p data-i="contactP"></p>
 </div></div>
 
+<div id="detail">
+  <a class="back" href="#mody" data-i="back"></a>
+  <div id="dbody"></div>
+</div>
+
+<div class="lb" id="lb" aria-modal="true" role="dialog">
+  <button class="x" data-a="close" aria-label="Close">×</button>
+  <button class="p" data-a="prev" aria-label="Previous">‹</button>
+  <button class="n" data-a="next" aria-label="Next">›</button>
+  <img id="lbimg" alt=""><div class="cap" id="lbcap"></div>
+</div>
+
 <footer data-i="foot"></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
 
 <script>
 /* ============================================================
@@ -95,11 +163,30 @@ footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1r
 const REPO = "tajiii8095/tajiii8095.github.io";   // repozitár, kde sú Releases
 
 const MODS = [
-  {game:"minecraft", name:"TV Radio",
+  {id:"tv-radio", game:"minecraft", name:"TV Radio",
    desc:{sk:"Rádio a televízne vysielanie v Minecrafte: vysielače, veže, antény a televízory.",en:"Radio and TV broadcasting in Minecraft: transmitters, towers, antennas and televisions."},
    mc:"Fabric 26.2",
    prefix:"tv-radio-mod",   // súbory modu musia začínať týmto názvom, napr. tv-radio-mod-6.3.0.jar
-   zaloha:["https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"]}  // použije sa, ak GitHub nepovie nič
+   zaloha:["https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"],  // použije sa, ak GitHub nepovie nič
+
+   /* POPIS: Markdown súbor v tomto repozitári (zobrazí sa v detaile modu).
+      Stačí jeden (en), prípadne pridaj aj sk: "mods/tv-radio/README.sk.md".
+      Obrázky v README môžu byť odkazy (https://...) alebo cesty relatívne k tomuto súboru. */
+   readme:{en:"mods/tv-radio/README.md"},
+
+   /* GALÉRIA: obrázky (url alebo cesta v repozitári) + popisky. Prvý je aj náhľad na karte. */
+   gallery:[
+     {src:"https://cdn.modrinth.com/data/cached_images/9b0e366d53e6dcebb6605e7abae24e842918d870.png",
+      cap:{sk:"Moderný televízor",en:"Modern Television"}},
+     {src:"https://cdn.modrinth.com/data/cached_images/06be25a3ea90f300c5eee1ed9cb1fb0e9995235b_0.webp",
+      cap:{sk:"Rádiový vysielač",en:"Radio Transmitter"}},
+     {src:"https://cdn.modrinth.com/data/cached_images/f2679ea58ba317a2970b19ce268a416768ec5a40.png",
+      cap:{sk:"Ovládací panel vysielačov",en:"Transmitter Control Panel"}},
+     {src:"https://cdn.modrinth.com/data/cached_images/d211716ec8a438f577b88311b4c66dea5d25ffe5.png",
+      cap:{sk:"Digitálny (DVB-T) vysielač",en:"Digital (DVB-T) transmitter"}},
+     {src:"https://cdn.modrinth.com/data/cached_images/c008754425bd208bf61478c1a1922f628dd1c290.png",
+      cap:{sk:"Analógový vysielač",en:"Analog transmitter"}}
+   ]}
 ];
 /* ============================================================ */
 
@@ -111,7 +198,9 @@ const TX = {
       contactP:"Nápad, chyba alebo otázka k modu? Napíš sem svoj Discord, e-mail alebo odkaz na YouTube.",
       foot:"Nezávislé mody. Minecraft a Euro Truck Simulator 2 sú ochranné známky ich vlastníkov.",
       dl:"Stiahnuť",dlv:"Stiahnuť v",arch:"Archív",archEmpty:"Archív (prázdny)",noOld:"Zatiaľ nie sú staršie verzie.",
-      ver:"Verzia",date:"Dátum",na:"Zatiaľ nie je dostupná",none:"Zatiaľ žiadne mody.",load:"Načítavam…"},
+      ver:"Verzia",date:"Dátum",na:"Zatiaľ nie je dostupná",none:"Zatiaľ žiadne mody.",load:"Načítavam…",
+      back:"← Späť na mody",detail:"Popis a galéria",gallery:"Galéria",descr:"Popis",noReadme:"Popis zatiaľ nie je dostupný.",
+      readmeErr:"Popis sa nepodarilo načítať.",notFound:"Tento mod neexistuje."},
   en:{home:"Home",mods:"Mods",contact:"Contact",
       hero:"Mods for <em>Minecraft</em><br>and <em>Euro Truck Simulator 2</em>",
       heroP:"Original projects, fixes and add-ons. The latest versions and an archive of all older releases in one place.",
@@ -119,7 +208,9 @@ const TX = {
       contactP:"Got an idea, a bug or a question about a mod? Put your Discord, e-mail or YouTube link here.",
       foot:"Independent mods. Minecraft and Euro Truck Simulator 2 are trademarks of their respective owners.",
       dl:"Download",dlv:"Download v",arch:"Archive",archEmpty:"Archive (empty)",noOld:"No older versions yet.",
-      ver:"Version",date:"Date",na:"Not available yet",none:"No mods yet.",load:"Loading…"}
+      ver:"Version",date:"Date",na:"Not available yet",none:"No mods yet.",load:"Loading…",
+      back:"← Back to mods",detail:"Description & gallery",gallery:"Gallery",descr:"Description",noReadme:"No description yet.",
+      readmeErr:"Could not load the description.",notFound:"This mod does not exist."}
 };
 let lang = "sk";
 try { const saved = localStorage.getItem("lang");
@@ -159,18 +250,22 @@ async function loadVersions(){
   }
 }
 
+function thumbOf(m){ const g=(m.gallery||[])[0];
+  return g ? `<a class="thumb" href="#mod/${esc(m.id)}"><img loading="lazy" src="${esc(g.src)}" alt="${esc(m.name)}"></a>` : ""; }
+
 function card(m){
   const [latest,...old] = m.versions;
-  if (!latest) return `<div class="card"><h3>${esc(m.name)}</h3><p>${esc(m.desc[lang])}</p><span class="btn" style="opacity:.5">${t("na")}</span></div>`;
+  const more = `<a class="btn ghost" href="#mod/${esc(m.id)}">${t("detail")}</a>`;
+  if (!latest) return `<div class="card">${thumbOf(m)}<h3>${esc(m.name)}</h3><p>${esc(m.desc[lang])}</p><span class="btn" style="opacity:.5">${t("na")}</span>${more}</div>`;
   const archive = old.length
     ? `<details><summary>${t("arch")} (${old.length})</summary><table><tr><th>${t("ver")}</th><th>${t("date")}</th><th></th></tr>`
       + old.map(o=>`<tr><td>${esc(o.v)}</td><td>${esc(o.date)}</td><td><a href="${esc(o.url)}">${t("dl")}</a></td></tr>`).join("")
       + `</table></details>`
     : `<details><summary>${t("archEmpty")}</summary><p style="margin-top:.5rem">${t("noOld")}</p></details>`;
-  return `<div class="card"><h3>${esc(m.name)}</h3>
+  return `<div class="card">${thumbOf(m)}<h3>${esc(m.name)}</h3>
     <div class="tags"><span class="tag dark">${esc(m.mc)}</span><span class="tag">v${esc(latest.v)}</span>${latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}</div>
     <p>${esc(m.desc[lang])}</p>
-    <a class="btn" href="${esc(latest.url)}">${t("dlv")}${esc(latest.v)}</a>${archive}</div>`;
+    <a class="btn" href="${esc(latest.url)}">${t("dlv")}${esc(latest.v)}</a>${more}${archive}</div>`;
 }
 
 function render(f){
@@ -184,6 +279,122 @@ function render(f){
 }
 
 let filter = "all";
+let curMod = null, galIdx = 0, readmeToken = 0;
+
+const slug = s => s.toLowerCase().trim().replace(/[^\p{L}\p{N}]+/gu,"-").replace(/^-+|-+$/g,"");
+const pick = o => o ? (o[lang] || o.en || o.sk || Object.values(o)[0] || "") : "";
+
+/* ---------- Markdown ---------- */
+function mdToHtml(txt){
+  if (window.marked && window.DOMPurify) return DOMPurify.sanitize(marked.parse(txt,{gfm:true}));
+  return "<pre>"+esc(txt)+"</pre>";   // keď sa nenačíta knižnica (CDN), ukáže sa aspoň čistý text
+}
+function fixMd(box, base){
+  box.querySelectorAll("h1,h2,h3,h4").forEach(h => { if(!h.id) h.id = "md-"+slug(h.textContent); });
+  box.querySelectorAll("table").forEach(tb => { const w=document.createElement("div"); w.className="tw"; tb.replaceWith(w); w.appendChild(tb); });
+  box.querySelectorAll("img").forEach(i => { const s=i.getAttribute("src")||"";
+    if (s && !/^(https?:|data:|\/)/i.test(s)) i.src = new URL(s, base).href; i.loading="lazy"; });
+  box.querySelectorAll("a[href]").forEach(a => { const h=a.getAttribute("href")||"";
+    if (/^https?:/i.test(h)) { a.target="_blank"; a.rel="noopener noreferrer"; }
+    else if (h.startsWith("#")) a.dataset.md = "md-"+slug(decodeURIComponent(h.slice(1)));
+    else if (!/^(mailto:|\/)/i.test(h)) a.href = new URL(h, base).href; });
+}
+async function loadReadme(m){
+  const box = document.getElementById("mdbox"); if (!box) return;
+  const url = pick(m.readme);
+  if (!url) { box.innerHTML = `<p class="sub">${t("noReadme")}</p>`; return; }
+  const token = ++readmeToken;
+  box.innerHTML = `<p class="sub">${t("load")}</p>`;
+  try {
+    const r = await fetch(url, {cache:"no-cache"}); if (!r.ok) throw 0;
+    const txt = await r.text();
+    if (token !== readmeToken) return;
+    box.innerHTML = mdToHtml(txt);
+    fixMd(box, new URL(url, location.href));
+  } catch(e){ if (token === readmeToken) box.innerHTML = `<p class="sub">${t("readmeErr")}</p>`; }
+}
+
+/* ---------- galéria ---------- */
+function galHtml(m){
+  const g = m.gallery||[]; if (!g.length) return "";
+  const cur = g[galIdx] || g[0];
+  return `<div class="sec-title">${t("gallery")}</div>
+    <button class="gal-main" data-open="${galIdx}" aria-label="${t("gallery")}"><img id="galimg" src="${esc(cur.src)}" alt="${esc(pick(cur.cap))}"></button>
+    <div class="gal-cap" id="galcap">${esc(pick(cur.cap))}</div>
+    <div class="gal-thumbs">${g.map((x,i)=>`<button data-gi="${i}" class="${i===galIdx?"on":""}" aria-label="${esc(pick(x.cap))}"><img loading="lazy" src="${esc(x.src)}" alt=""></button>`).join("")}</div>`;
+}
+function setGal(i){
+  const g = curMod && curMod.gallery; if (!g || !g[i]) return;
+  galIdx = i;
+  const img = document.getElementById("galimg"), cap = document.getElementById("galcap"), mainBtn = document.querySelector(".gal-main");
+  img.src = g[i].src; img.alt = pick(g[i].cap); cap.textContent = pick(g[i].cap); mainBtn.dataset.open = i;
+  document.querySelectorAll(".gal-thumbs button").forEach((b,k)=>b.classList.toggle("on",k===i));
+}
+const lb = document.getElementById("lb");
+function lbShow(i){
+  const g = curMod && curMod.gallery; if (!g || !g.length) return;
+  galIdx = (i + g.length) % g.length;
+  document.getElementById("lbimg").src = g[galIdx].src;
+  document.getElementById("lbcap").textContent = pick(g[galIdx].cap);
+  lb.classList.add("open");
+}
+function lbClose(){ lb.classList.remove("open"); if (curMod) setGal(galIdx); }
+lb.addEventListener("click", e => {
+  const a = e.target.closest("button"); 
+  if (a) { const k=a.dataset.a; if(k==="close") lbClose(); else lbShow(galIdx + (k==="next"?1:-1)); }
+  else if (e.target === lb) lbClose();
+});
+document.addEventListener("keydown", e => {
+  if (!lb.classList.contains("open")) return;
+  if (e.key==="Escape") lbClose(); else if (e.key==="ArrowRight") lbShow(galIdx+1); else if (e.key==="ArrowLeft") lbShow(galIdx-1);
+});
+
+/* ---------- detail modu ---------- */
+function renderDetail(m){
+  const [latest,...old] = m.versions;
+  const dl = latest
+    ? `<a class="btn" href="${esc(latest.url)}">${t("dlv")}${esc(latest.v)}</a>` +
+      (old.length ? `<details><summary>${t("arch")} (${old.length})</summary><table><tr><th>${t("ver")}</th><th>${t("date")}</th><th></th></tr>`
+        + old.map(o=>`<tr><td>${esc(o.v)}</td><td>${esc(o.date)}</td><td><a href="${esc(o.url)}">${t("dl")}</a></td></tr>`).join("") + `</table></details>`
+        : `<details><summary>${t("archEmpty")}</summary><p style="margin-top:.5rem">${t("noOld")}</p></details>`)
+    : `<span class="btn" style="opacity:.5">${t("na")}</span>`;
+  document.getElementById("dbody").innerHTML =
+    `<div class="dhead"><div><h1>${esc(m.name)}</h1>
+       <div class="tags"><span class="tag dark">${esc(m.mc)}</span>${latest?`<span class="tag">v${esc(latest.v)}</span>`:""}${latest&&latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}</div>
+       <p class="sub" style="margin:0">${esc(m.desc[lang])}</p></div>
+     <div class="dl-box">${dl}</div></div>`
+    + galHtml(m)
+    + `<div class="sec-title">${t("descr")}</div><div class="md" id="mdbox"></div>`;
+  document.title = "TajiiiMods – " + m.name;
+  loadReadme(m);
+}
+document.getElementById("detail").addEventListener("click", e => {
+  const th = e.target.closest("[data-gi]"); if (th) { setGal(+th.dataset.gi); return; }
+  const op = e.target.closest("[data-open]"); if (op) { lbShow(+op.dataset.open); return; }
+  const md = e.target.closest("a[data-md]");
+  if (md) { const el = document.getElementById(md.dataset.md); if (el) { e.preventDefault(); el.scrollIntoView({behavior:"smooth",block:"start"}); } }
+});
+
+/* ---------- smerovanie: #mod/<id> = detail, inak zoznam ---------- */
+function route(){
+  const h = location.hash;
+  if (h.startsWith("#mod/")) {
+    const m = MODS.find(x => x.id === decodeURIComponent(h.slice(5)));
+    if (m) {
+      if (curMod !== m) galIdx = 0;
+      curMod = m;
+      document.body.classList.add("detail-open");
+      renderDetail(m); window.scrollTo(0,0); return;
+    }
+    document.getElementById("dbody").innerHTML = `<p>${t("notFound")}</p>`;
+    document.body.classList.add("detail-open"); return;
+  }
+  const was = document.body.classList.contains("detail-open");
+  document.body.classList.remove("detail-open"); curMod = null; document.title = "TajiiiMods";
+  if (was && h.length > 1) { const el = document.getElementById(h.slice(1)); if (el) el.scrollIntoView(); }
+}
+window.addEventListener("hashchange", route);
+
 document.getElementById("tabs").addEventListener("click", e => {
   const b = e.target.closest("button"); if (!b) return;
   document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("active", x === b));
@@ -194,10 +405,11 @@ document.querySelector(".lang").addEventListener("click", e => {
   lang = b.dataset.l;
   try { localStorage.setItem("lang", lang); } catch(e){}
   applyLang(); render(filter);
+  if (curMod) { renderDetail(curMod); lbClose(); }
 });
 applyLang();
 document.getElementById("content").innerHTML = `<p>${t("load")}</p>`;
-loadVersions().then(()=>render(filter));
+loadVersions().then(()=>{ render(filter); route(); });
 </script>
 </body>
 </html>

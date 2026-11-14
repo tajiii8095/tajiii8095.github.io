@@ -200,7 +200,7 @@ const TX = {
       cta:"Prezrieť mody",sub:"Vyber hru a stiahni si najnovšiu verziu alebo niektorú zo starších v archíve.",all:"Všetko",
       contactP:"Nápad, chyba alebo otázka k modu? Pripoj sa na Discord server alebo mi napíš priamo.",dcServer:"Discord server",dcNick:"Môj Discord nick",
       foot:"Nezávislé mody. Minecraft a Euro Truck Simulator 2 sú ochranné známky ich vlastníkov.",
-      dl:"Stiahnuť",dlv:"Stiahnuť v",arch:"Archív",archEmpty:"Archív (prázdny)",noOld:"Zatiaľ nie sú staršie verzie.",
+      dl:"Stiahnuť",dlTotal:"Počet stiahnutí všetkých verzií",dlv:"Stiahnuť v",arch:"Archív",archEmpty:"Archív (prázdny)",noOld:"Zatiaľ nie sú staršie verzie.",
       ver:"Verzia",date:"Dátum",na:"Zatiaľ nie je dostupná",none:"Zatiaľ žiadne mody.",load:"Načítavam…",
       back:"← Späť na mody",detail:"Popis a galéria",gallery:"Galéria",descr:"Popis",noReadme:"Popis zatiaľ nie je dostupný.",
       readmeErr:"Popis sa nepodarilo načítať.",notFound:"Tento mod neexistuje."},
@@ -210,7 +210,7 @@ const TX = {
       cta:"Browse mods",sub:"Pick a game and download the latest version or any older one from the archive.",all:"All",
       contactP:"Got an idea, a bug or a question about a mod? Join the Discord server or message me directly.",dcServer:"Discord server",dcNick:"My Discord nick",
       foot:"Independent mods. Minecraft and Euro Truck Simulator 2 are trademarks of their respective owners.",
-      dl:"Download",dlv:"Download v",arch:"Archive",archEmpty:"Archive (empty)",noOld:"No older versions yet.",
+      dl:"Download",dlTotal:"Total downloads of all versions",dlv:"Download v",arch:"Archive",archEmpty:"Archive (empty)",noOld:"No older versions yet.",
       ver:"Version",date:"Date",na:"Not available yet",none:"No mods yet.",load:"Loading…",
       back:"← Back to mods",detail:"Description & gallery",gallery:"Gallery",descr:"Description",noReadme:"No description yet.",
       readmeErr:"Could not load the description.",notFound:"This mod does not exist."}
@@ -243,15 +243,18 @@ async function loadVersions(){
       for (const a of rel.assets||[]){
         const low = a.name.toLowerCase();
         for (const m of MODS) if (low.startsWith(m.prefix) && /\.(jar|zip)$/.test(low))
-          m.versions.push({v:verOf(a.name), date:(rel.published_at||"").slice(0,10), note:rel.name||"", url:a.browser_download_url});
+          m.versions.push({v:verOf(a.name), date:(rel.published_at||"").slice(0,10), note:rel.name||"", url:a.browser_download_url, dc:a.download_count||0});
       }
     }
   } catch(e){}
   for (const m of MODS){
     if (!m.versions.length) m.versions = (m.zaloha||[]).map(u=>({v:verOf(u), date:"", note:"", url:u}));
     m.versions.sort((a,b)=>cmp(a.v,b.v));
+    m.downloads = m.versions.some(x=>x.dc!==undefined) ? m.versions.reduce((n,x)=>n+(x.dc||0),0) : null;
   }
 }
+
+const dlTag = m => m.downloads==null ? "" : `<span class="tag" title="${t("dlTotal")}">⬇ ${m.downloads.toLocaleString(lang==="sk"?"sk-SK":"en-US")}</span>`;
 
 function thumbOf(m){ const g=(m.gallery||[])[0];
   return g ? `<a class="thumb" href="#mod/${esc(m.id)}"><img loading="lazy" src="${esc(g.src)}" alt="${esc(m.name)}"></a>` : ""; }
@@ -266,7 +269,7 @@ function card(m){
       + `</table></details>`
     : `<details><summary>${t("archEmpty")}</summary><p style="margin-top:.5rem">${t("noOld")}</p></details>`;
   return `<div class="card">${thumbOf(m)}<h3>${esc(m.name)}</h3>
-    <div class="tags"><span class="tag dark">${esc(m.mc)}</span><span class="tag">v${esc(latest.v)}</span>${latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}</div>
+    <div class="tags"><span class="tag dark">${esc(m.mc)}</span><span class="tag">v${esc(latest.v)}</span>${latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}${dlTag(m)}</div>
     <p>${esc(m.desc[lang])}</p>
     <a class="btn" href="${esc(latest.url)}">${t("dlv")}${esc(latest.v)}</a>${more}${archive}</div>`;
 }
@@ -363,7 +366,7 @@ function renderDetail(m){
     : `<span class="btn" style="opacity:.5">${t("na")}</span>`;
   document.getElementById("dbody").innerHTML =
     `<div class="dhead"><div><h1>${esc(m.name)}</h1>
-       <div class="tags"><span class="tag dark">${esc(m.mc)}</span>${latest?`<span class="tag">v${esc(latest.v)}</span>`:""}${latest&&latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}</div>
+       <div class="tags"><span class="tag dark">${esc(m.mc)}</span>${latest?`<span class="tag">v${esc(latest.v)}</span>`:""}${latest&&latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}${dlTag(m)}</div>
        <p class="sub" style="margin:0">${esc(m.desc[lang])}</p></div>
      <div class="dl-box">${dl}</div></div>`
     + galHtml(m)

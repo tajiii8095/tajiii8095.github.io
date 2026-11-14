@@ -14,6 +14,9 @@ header{position:sticky;top:0;z-index:10;background:var(--black);color:#fff;borde
 .bar{max-width:1060px;margin:0 auto;padding:.9rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
 .logo{font-weight:800;font-size:1.2rem;text-decoration:none;letter-spacing:.3px}
 .logo span{color:var(--purple2)}
+.lang{display:inline-flex;margin-left:1.3rem;border:1px solid #3a3a46;border-radius:8px;overflow:hidden;vertical-align:middle}
+.lang button{background:none;border:0;color:#c9c9d6;padding:.3rem .7rem;cursor:pointer;font-size:.85rem;font-weight:600}
+.lang button.on{background:var(--purple);color:#fff}
 nav a{color:#c9c9d6;text-decoration:none;margin-left:1.3rem;font-size:.95rem}
 nav a:hover{color:#fff}
 .hero{background:radial-gradient(900px 300px at 80% -20%,#4c1d95 0%,transparent 70%),var(--black);color:#fff;padding:4rem 1.2rem 4.5rem;text-align:center}
@@ -55,20 +58,20 @@ footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1r
 <body>
 <header><div class="bar">
   <a class="logo" href="#top">Tajiii<span>Mods</span></a>
-  <nav><a href="#top">Domov</a><a href="#mody">Mody</a><a href="#kontakt">Kontakt</a></nav>
+  <nav><a href="#top" data-i="home">Domov</a><a href="#mody" data-i="mods">Mody</a><a href="#kontakt" data-i="contact">Kontakt</a><span class="lang"><button data-l="sk">SK</button><button data-l="en">EN</button></span></nav>
 </div></header>
 
 <div class="hero" id="top">
-  <h1>Mody pre <em>Minecraft</em><br>a <em>Euro Truck Simulator 2</em></h1>
-  <p>Vlastné projekty, opravy a doplnky. Najnovšie verzie a archív všetkých starších vydaní na jednom mieste.</p>
-  <a class="cta" href="#mody">Prezrieť mody</a>
+  <h1 data-ih="hero"></h1>
+  <p data-i="heroP"></p>
+  <a class="cta" href="#mody" data-i="cta"></a>
 </div>
 
 <section id="mody">
-  <h2>Mody</h2>
-  <p class="sub">Vyber hru a stiahni si najnovšiu verziu alebo niektorú zo starších v archíve.</p>
+  <h2 data-i="mods"></h2>
+  <p class="sub" data-i="sub"></p>
   <div class="chips" id="tabs">
-    <button data-f="all" class="active">Všetko</button>
+    <button data-f="all" class="active" data-i="all"></button>
     <button data-f="minecraft">Minecraft</button>
     <button data-f="ets2">ETS2</button>
   </div>
@@ -76,11 +79,11 @@ footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1r
 </section>
 
 <div class="about" id="kontakt"><div class="in">
-  <h2>Kontakt</h2>
-  <p>Nápad, chyba alebo otázka k modu? Napíš sem svoj Discord, e-mail alebo odkaz na YouTube.</p>
+  <h2 data-i="contact"></h2>
+  <p data-i="contactP"></p>
 </div></div>
 
-<footer>Nezávislé mody. Minecraft a Euro Truck Simulator 2 sú ochranné známky ich vlastníkov.</footer>
+<footer data-i="foot"></footer>
 
 <script>
 /* ============================================================
@@ -93,13 +96,43 @@ const REPO = "tajiii8095/tajiii8095.github.io";   // repozitár, kde sú Release
 
 const MODS = [
   {game:"minecraft", name:"TV Radio",
-   desc:"Rádio a televízne vysielanie v Minecrafte: vysielače, veže, antény a televízory.",
+   desc:{sk:"Rádio a televízne vysielanie v Minecrafte: vysielače, veže, antény a televízory.",en:"Radio and TV broadcasting in Minecraft: transmitters, towers, antennas and televisions."},
    mc:"Fabric 26.2",
    prefix:"tv-radio-mod",   // súbory modu musia začínať týmto názvom, napr. tv-radio-mod-6.3.0.jar
    zaloha:["https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"]}  // použije sa, ak GitHub nepovie nič
 ];
 /* ============================================================ */
 
+const TX = {
+  sk:{home:"Domov",mods:"Mody",contact:"Kontakt",
+      hero:"Mody pre <em>Minecraft</em><br>a <em>Euro Truck Simulator 2</em>",
+      heroP:"Vlastné projekty, opravy a doplnky. Najnovšie verzie a archív všetkých starších vydaní na jednom mieste.",
+      cta:"Prezrieť mody",sub:"Vyber hru a stiahni si najnovšiu verziu alebo niektorú zo starších v archíve.",all:"Všetko",
+      contactP:"Nápad, chyba alebo otázka k modu? Napíš sem svoj Discord, e-mail alebo odkaz na YouTube.",
+      foot:"Nezávislé mody. Minecraft a Euro Truck Simulator 2 sú ochranné známky ich vlastníkov.",
+      dl:"Stiahnuť",dlv:"Stiahnuť v",arch:"Archív",archEmpty:"Archív (prázdny)",noOld:"Zatiaľ nie sú staršie verzie.",
+      ver:"Verzia",date:"Dátum",na:"Zatiaľ nie je dostupná",none:"Zatiaľ žiadne mody.",load:"Načítavam…"},
+  en:{home:"Home",mods:"Mods",contact:"Contact",
+      hero:"Mods for <em>Minecraft</em><br>and <em>Euro Truck Simulator 2</em>",
+      heroP:"Original projects, fixes and add-ons. The latest versions and an archive of all older releases in one place.",
+      cta:"Browse mods",sub:"Pick a game and download the latest version or any older one from the archive.",all:"All",
+      contactP:"Got an idea, a bug or a question about a mod? Put your Discord, e-mail or YouTube link here.",
+      foot:"Independent mods. Minecraft and Euro Truck Simulator 2 are trademarks of their respective owners.",
+      dl:"Download",dlv:"Download v",arch:"Archive",archEmpty:"Archive (empty)",noOld:"No older versions yet.",
+      ver:"Version",date:"Date",na:"Not available yet",none:"No mods yet.",load:"Loading…"}
+};
+let lang = "sk";
+try { const saved = localStorage.getItem("lang");
+  if (saved === "sk" || saved === "en") lang = saved;
+  else { const n = (navigator.language||"").toLowerCase(); lang = (n.startsWith("sk") || n.startsWith("cs")) ? "sk" : "en"; } } catch(e){}
+if (lang !== "sk" && lang !== "en") lang = "en";
+const t = k => TX[lang][k];
+function applyLang(){
+  document.documentElement.lang = lang;
+  document.querySelectorAll("[data-i]").forEach(e => e.textContent = t(e.dataset.i));
+  document.querySelectorAll("[data-ih]").forEach(e => e.innerHTML = t(e.dataset.ih));
+  document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.l === lang));
+}
 const GAMES = {minecraft:"⛏️ Minecraft", ets2:"🚛 Euro Truck Simulator 2"};
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const verOf = n => (String(n).match(/(\d+(?:\.\d+)+)/)||[,"?"])[1];
@@ -128,16 +161,16 @@ async function loadVersions(){
 
 function card(m){
   const [latest,...old] = m.versions;
-  if (!latest) return `<div class="card"><h3>${esc(m.name)}</h3><p>${esc(m.desc)}</p><span class="btn" style="opacity:.5">Zatiaľ nie je dostupná</span></div>`;
+  if (!latest) return `<div class="card"><h3>${esc(m.name)}</h3><p>${esc(m.desc[lang])}</p><span class="btn" style="opacity:.5">${t("na")}</span></div>`;
   const archive = old.length
-    ? `<details><summary>Archív (${old.length})</summary><table><tr><th>Verzia</th><th>Dátum</th><th></th></tr>`
-      + old.map(o=>`<tr><td>${esc(o.v)}</td><td>${esc(o.date)}</td><td><a href="${esc(o.url)}">Stiahnuť</a></td></tr>`).join("")
+    ? `<details><summary>${t("arch")} (${old.length})</summary><table><tr><th>${t("ver")}</th><th>${t("date")}</th><th></th></tr>`
+      + old.map(o=>`<tr><td>${esc(o.v)}</td><td>${esc(o.date)}</td><td><a href="${esc(o.url)}">${t("dl")}</a></td></tr>`).join("")
       + `</table></details>`
-    : `<details><summary>Archív (prázdny)</summary><p style="margin-top:.5rem">Zatiaľ nie sú staršie verzie.</p></details>`;
+    : `<details><summary>${t("archEmpty")}</summary><p style="margin-top:.5rem">${t("noOld")}</p></details>`;
   return `<div class="card"><h3>${esc(m.name)}</h3>
     <div class="tags"><span class="tag dark">${esc(m.mc)}</span><span class="tag">v${esc(latest.v)}</span>${latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}</div>
-    <p>${esc(m.desc)}</p>
-    <a class="btn" href="${esc(latest.url)}">Stiahnuť v${esc(latest.v)}</a>${archive}</div>`;
+    <p>${esc(m.desc[lang])}</p>
+    <a class="btn" href="${esc(latest.url)}">${t("dlv")}${esc(latest.v)}</a>${archive}</div>`;
 }
 
 function render(f){
@@ -145,7 +178,7 @@ function render(f){
   for (const g of Object.keys(GAMES)){
     if (f !== "all" && f !== g) continue;
     const list = MODS.filter(m => m.game === g);
-    html += `<div class="gh">${GAMES[g]}</div>` + (list.length ? `<div class="grid">${list.map(card).join("")}</div>` : "<p>Zatiaľ žiadne mody.</p>");
+    html += `<div class="gh">${GAMES[g]}</div>` + (list.length ? `<div class="grid">${list.map(card).join("")}</div>` : `<p>${t("none")}</p>`);
   }
   document.getElementById("content").innerHTML = html;
 }
@@ -156,7 +189,14 @@ document.getElementById("tabs").addEventListener("click", e => {
   document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("active", x === b));
   filter = b.dataset.f; render(filter);
 });
-document.getElementById("content").innerHTML = "<p>Načítavam…</p>";
+document.querySelector(".lang").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  lang = b.dataset.l;
+  try { localStorage.setItem("lang", lang); } catch(e){}
+  applyLang(); render(filter);
+});
+applyLang();
+document.getElementById("content").innerHTML = `<p>${t("load")}</p>`;
 loadVersions().then(()=>render(filter));
 </script>
 </body>

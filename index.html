@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TajiiiMods</title>
+<style>
+:root{--black:#0e0e12;--ink:#17171d;--purple:#7c3aed;--purple2:#a78bfa;--soft:#f5f3ff;--white:#fff;--muted:#6b6b7b;--line:#e7e4f3}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;background:var(--white);color:var(--ink);line-height:1.55}
+a{color:inherit}
+header{position:sticky;top:0;z-index:10;background:var(--black);color:#fff;border-bottom:1px solid #26262f}
+.bar{max-width:1060px;margin:0 auto;padding:.9rem 1.2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.logo{font-weight:800;font-size:1.2rem;text-decoration:none;letter-spacing:.3px}
+.logo span{color:var(--purple2)}
+nav a{color:#c9c9d6;text-decoration:none;margin-left:1.3rem;font-size:.95rem}
+nav a:hover{color:#fff}
+.hero{background:radial-gradient(900px 300px at 80% -20%,#4c1d95 0%,transparent 70%),var(--black);color:#fff;padding:4rem 1.2rem 4.5rem;text-align:center}
+.hero h1{margin:0;font-size:clamp(2rem,6vw,3.4rem);letter-spacing:-1px}
+.hero h1 em{font-style:normal;color:var(--purple2)}
+.hero p{max-width:560px;margin:1rem auto 1.8rem;color:#b9b9c8}
+.cta{display:inline-block;background:var(--purple);color:#fff;text-decoration:none;padding:.7rem 1.6rem;border-radius:10px;font-weight:600}
+.cta:hover{background:#6d28d9}
+section{max-width:1060px;margin:0 auto;padding:3rem 1.2rem}
+h2{margin:0 0 .3rem;font-size:1.8rem;letter-spacing:-.5px}
+.sub{color:var(--muted);margin:0 0 1.5rem}
+.chips{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.6rem}
+.chips button{border:1.5px solid var(--ink);background:#fff;color:var(--ink);padding:.45rem 1.1rem;border-radius:999px;cursor:pointer;font-size:.95rem;font-weight:500}
+.chips button.active{background:var(--ink);color:#fff}
+.gh{display:flex;align-items:center;gap:.6rem;margin:2rem 0 1rem;font-size:1.25rem;font-weight:700}
+.gh::after{content:"";flex:1;height:2px;background:var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
+.card{border:1.5px solid var(--line);border-radius:16px;padding:1.3rem;background:#fff;transition:.2s;display:flex;flex-direction:column}
+.card:hover{border-color:var(--purple);box-shadow:0 8px 28px rgba(124,58,237,.14);transform:translateY(-2px)}
+.card h3{margin:0 0 .5rem;font-size:1.15rem}
+.tags{margin-bottom:.6rem}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;padding:.15rem .65rem;border-radius:999px;background:var(--soft);color:var(--purple);margin:0 .3rem .3rem 0}
+.tag.dark{background:var(--ink);color:#fff}
+.card p{margin:0 0 1rem;color:var(--muted);font-size:.95rem;flex:1}
+.btn{display:block;text-align:center;background:var(--ink);color:#fff;text-decoration:none;padding:.6rem 1rem;border-radius:10px;font-weight:600;font-size:.95rem}
+.btn:hover{background:var(--purple)}
+details{margin-top:.9rem}
+summary{cursor:pointer;font-weight:600;color:var(--purple);font-size:.92rem}
+table{width:100%;border-collapse:collapse;margin-top:.6rem;font-size:.85rem}
+th,td{text-align:left;padding:.4rem .2rem;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-weight:500}
+td a{color:var(--purple);font-weight:600}
+.about{background:var(--black);color:#fff}
+.about .in{max-width:1060px;margin:0 auto;padding:3rem 1.2rem}
+.about p{color:#b9b9c8;max-width:640px}
+footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1rem 2rem;font-size:.85rem;border-top:1px solid #26262f}
+</style>
+</head>
+<body>
+<header><div class="bar">
+  <a class="logo" href="#top">Tajiii<span>Mods</span></a>
+  <nav><a href="#top">Domov</a><a href="#mody">Mody</a><a href="#kontakt">Kontakt</a></nav>
+</div></header>
+
+<div class="hero" id="top">
+  <h1>Mody pre <em>Minecraft</em><br>a <em>Euro Truck Simulator 2</em></h1>
+  <p>Vlastné projekty, opravy a doplnky. Najnovšie verzie a archív všetkých starších vydaní na jednom mieste.</p>
+  <a class="cta" href="#mody">Prezrieť mody</a>
+</div>
+
+<section id="mody">
+  <h2>Mody</h2>
+  <p class="sub">Vyber hru a stiahni si najnovšiu verziu alebo niektorú zo starších v archíve.</p>
+  <div class="chips" id="tabs">
+    <button data-f="all" class="active">Všetko</button>
+    <button data-f="minecraft">Minecraft</button>
+    <button data-f="ets2">ETS2</button>
+  </div>
+  <div id="content"></div>
+</section>
+
+<div class="about" id="kontakt"><div class="in">
+  <h2>Kontakt</h2>
+  <p>Nápad, chyba alebo otázka k modu? Napíš sem svoj Discord, e-mail alebo odkaz na YouTube.</p>
+</div></div>
+
+<footer>Nezávislé mody. Minecraft a Euro Truck Simulator 2 sú ochranné známky ich vlastníkov.</footer>
+
+<script>
+/* ===== TU UPRAVUJEŠ MODY =====
+   game: "minecraft" alebo "ets2"
+   versions: prvá je najnovšia, ostatné idú do archívu
+   url: odkaz na súbor v GitHub Releases ("#" = zatiaľ nič) */
+const MODS = [
+  {game:"minecraft", name:"FM/AM Radio", desc:"Rádio vysielač, veža, kotviace laná a antény.", mc:"Fabric 26.2",
+   versions:[{v:"1.0.0", date:"2026-11-09", note:"Prvé vydanie", url:"#"}]},
+  {game:"minecraft", name:"IPTV", desc:"Analógové a DVB-T vysielače a televízory.", mc:"Fabric",
+   versions:[{v:"0.1.0", date:"2026-11-13", note:"Testovacia verzia", url:"#"}]},
+  {game:"minecraft", name:"Kingdoms", desc:"Hrady a kráľovstvá vo svete.", mc:"Fabric",
+   versions:[{v:"0.2.0", date:"2026-11-12", note:"Viac typov hradov", url:"#"},
+             {v:"0.1.0", date:"2026-11-10", note:"Prvá verzia", url:"#"}]},
+  {game:"ets2", name:"Ukážkový ETS2 mod", desc:"Sem napíš popis svojho ETS2 modu.", mc:"ETS2 1.5x",
+   versions:[{v:"1.1", date:"2026-11-01", note:"Oprava textúr", url:"#"},
+             {v:"1.0", date:"2026-10-15", note:"Prvé vydanie", url:"#"}]}
+];
+const GAMES = {minecraft:"⛏️ Minecraft", ets2:"🚛 Euro Truck Simulator 2"};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function card(m){
+  const [latest,...old] = m.versions;
+  const archive = old.length
+    ? `<details><summary>Archív (${old.length})</summary><table><tr><th>Verzia</th><th>Dátum</th><th>Poznámka</th><th></th></tr>`
+      + old.map(o=>`<tr><td>${esc(o.v)}</td><td>${esc(o.date)}</td><td>${esc(o.note||"")}</td><td><a href="${esc(o.url)}">Stiahnuť</a></td></tr>`).join("")
+      + `</table></details>`
+    : `<details><summary>Archív (prázdny)</summary><p style="margin-top:.5rem">Zatiaľ nie sú staršie verzie.</p></details>`;
+  return `<div class="card"><h3>${esc(m.name)}</h3>
+    <div class="tags"><span class="tag dark">${esc(m.mc)}</span><span class="tag">v${esc(latest.v)}</span><span class="tag">${esc(latest.date)}</span></div>
+    <p>${esc(m.desc)}</p>
+    <a class="btn" href="${esc(latest.url)}">Stiahnuť v${esc(latest.v)}</a>${archive}</div>`;
+}
+
+function render(f){
+  let html = "";
+  for (const g of Object.keys(GAMES)){
+    if (f !== "all" && f !== g) continue;
+    const list = MODS.filter(m => m.game === g);
+    html += `<div class="gh">${GAMES[g]}</div>` + (list.length ? `<div class="grid">${list.map(card).join("")}</div>` : "<p>Zatiaľ žiadne mody.</p>");
+  }
+  document.getElementById("content").innerHTML = html;
+}
+
+document.getElementById("tabs").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  document.querySelectorAll("#tabs button").forEach(x => x.classList.toggle("active", x === b));
+  render(b.dataset.f);
+});
+render("all");
+</script>
+</body>
+</html>

@@ -83,13 +83,18 @@ footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1r
 <footer>Nezávislé mody. Minecraft a Euro Truck Simulator 2 sú ochranné známky ich vlastníkov.</footer>
 
 <script>
+/* ============================================================
+   STAČÍ VLOŽIŤ ODKAZ MEDZI UVODZOVKY (""):
+   ============================================================ */
+const TV_RADIO_ODKAZ = "";   // <- sem vlož odkaz na stiahnutie TV Radio modu
+
 /* ===== TU UPRAVUJEŠ MODY =====
    game: "minecraft" alebo "ets2"
    versions: prvá je najnovšia, ostatné idú do archívu
    url: odkaz na súbor v GitHub Releases ("#" = zatiaľ nič) */
 const MODS = [
   {game:"minecraft", name:"TV Radio", desc:"Rádio a televízne vysielanie v Minecrafte: vysielače, veže, antény a televízory.", mc:"Fabric 26.2",
-   versions:[{v:"1.0.0", date:"2026-11-14", note:"Prvé vydanie", url:"#"}]}
+   versions:[{v:"1.0.0", date:"2026-11-14", note:"Prvé vydanie", url:TV_RADIO_ODKAZ || "#"}]}
 ];
 const GAMES = {minecraft:"⛏️ Minecraft", ets2:"🚛 Euro Truck Simulator 2"};
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));

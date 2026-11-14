@@ -1,0 +1,31 @@
+name: Discord oznam o novom release
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Poslať správu na Discord
+        env:
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          TITLE: ${{ github.event.release.name || github.event.release.tag_name }}
+          TAG: ${{ github.event.release.tag_name }}
+          URL: ${{ github.event.release.html_url }}
+          BODY: ${{ github.event.release.body }}
+          ASSETS: ${{ toJson(github.event.release.assets) }}
+        run: |
+          # zoznam súborov s priamymi odkazmi na stiahnutie
+          FILES=$(echo "$ASSETS" | jq -r '.[] | "• [\(.name)](\(.browser_download_url))"')
+          DESC=$(printf '%s\n\n%s' "${BODY:0:1500}" "$FILES")
+
+          jq -n \
+            --arg title "🆕 Nový release: $TITLE" \
+            --arg url "$URL" \
+            --arg desc "$DESC" \
+            --arg tag "$TAG" \
+            '{embeds:[{title:$title, url:$url, description:$desc,
+                       color:8141549, footer:{text:("Verzia " + $tag)}}]}' \
+          | curl -sS -f -H "Content-Type: application/json" -d @- "$WEBHOOK"

@@ -3,6 +3,21 @@ name: Discord oznam o novom release
 on:
   release:
     types: [published]
+  # ručné spustenie: používa ho testovacie tlačidlo v admin paneli na webe
+  workflow_dispatch:
+    inputs:
+      title:
+        description: Názov releasu
+        required: true
+        default: TV Radio (test)
+      body:
+        description: Popis zmien
+        required: false
+        default: ""
+      prerelease:
+        description: Predbežná verzia
+        required: false
+        default: "false"
 
 jobs:
   notify:
@@ -11,14 +26,18 @@ jobs:
       - name: Poslať správu na Discord
         env:
           WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          TITLE: ${{ github.event.release.name || github.event.release.tag_name }}
-          BODY: ${{ github.event.release.body }}
-          PRERELEASE: ${{ github.event.release.prerelease }}
-          AUTHOR: ${{ github.event.release.author.login }}
-          AVATAR: ${{ github.event.release.author.avatar_url }}
+          TEST: ${{ github.event_name == 'workflow_dispatch' }}
+          TITLE: ${{ github.event.release.name || github.event.release.tag_name || inputs.title }}
+          BODY: ${{ github.event.release.body || inputs.body }}
+          PRERELEASE: ${{ github.event.release.prerelease || inputs.prerelease }}
+          AUTHOR: ${{ github.event.release.author.login || github.actor }}
+          AVATAR: ${{ github.event.release.author.avatar_url || format('https://github.com/{0}.png', github.actor) }}
           PUBLISHED: ${{ github.event.release.published_at }}
           SITE: https://tajiii8095.github.io/
         run: |
+          # pri teste nie je čas vydania z releasu, použije sa aktuálny
+          PUBLISHED="${PUBLISHED:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
+
           # Verzia je len na jednom mieste: v nadpise (názov releasu ju už obsahuje).
           # Nadpis aj pole "Stiahnutie" vedú na web, nie na GitHub a nie na priamy odkaz na súbor.
           jq -n \
@@ -26,18 +45,19 @@ jobs:
             --arg site "$SITE" \
             --arg body "${BODY:0:1500}" \
             --arg pre "$PRERELEASE" \
+            --arg test "$TEST" \
             --arg author "$AUTHOR" \
             --arg avatar "$AVATAR" \
             --arg published "$PUBLISHED" '
             {embeds: [{
-                author: {name: "🆕 Nový release"},
+                author: {name: (if $test == "true" then "🧪 TEST · Nový release" else "🆕 Nový release" end)},
                 title: $title,
                 url: $site,
                 description: (if ($body | length) > 0 then $body else "_Bez popisu zmien._" end),
-                color: (if $pre == "true" then 16096779 else 8141549 end),
+                color: (if $test == "true" then 9807270 elif $pre == "true" then 16096779 else 8141549 end),
                 fields: [{name: "📦 Stiahnutie", value: ("**[" + ($site | sub("^https?://"; "") | rtrimstr("/")) + "](" + $site + ")**"), inline: false}],
-                footer: ({text: ("Vydal " + $author + (if $pre == "true" then "  ·  predbežná verzia" else "" end))}
+                footer: ({text: ((if $test == "true" then "Testovací oznam  ·  " else "" end) + "Vydal " + $author + (if $pre == "true" then "  ·  predbežná verzia" else "" end))}
                          + (if ($avatar | length) > 0 then {icon_url: $avatar} else {} end)),
-                timestamp: (if ($published | length) > 0 then $published else null end)
+                timestamp: $published
               }]}' \
           | curl -sS -f -H "Content-Type: application/json" -d @- "$WEBHOOK"

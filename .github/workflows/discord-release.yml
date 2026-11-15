@@ -12,41 +12,30 @@ jobs:
         env:
           WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           TITLE: ${{ github.event.release.name || github.event.release.tag_name }}
-          TAG: ${{ github.event.release.tag_name }}
-          URL: ${{ github.event.release.html_url }}
           BODY: ${{ github.event.release.body }}
-          ASSETS: ${{ toJson(github.event.release.assets) }}
           PRERELEASE: ${{ github.event.release.prerelease }}
           AUTHOR: ${{ github.event.release.author.login }}
           AVATAR: ${{ github.event.release.author.avatar_url }}
           PUBLISHED: ${{ github.event.release.published_at }}
-          REPO: ${{ github.repository }}
+          SITE: https://tajiii8095.github.io/
         run: |
           # Verzia je len na jednom mieste: v nadpise (názov releasu ju už obsahuje).
-          # Súbory sú preto ako "stiahnuť" odkazy bez čísla verzie v názve a bez pätičky "Verzia ...".
+          # Nadpis aj pole "Stiahnutie" vedú na web, nie na GitHub a nie na priamy odkaz na súbor.
           jq -n \
             --arg title "$TITLE" \
-            --arg tag "$TAG" \
-            --arg url "$URL" \
+            --arg site "$SITE" \
             --arg body "${BODY:0:1500}" \
-            --argjson assets "$ASSETS" \
             --arg pre "$PRERELEASE" \
             --arg author "$AUTHOR" \
             --arg avatar "$AVATAR" \
-            --arg published "$PUBLISHED" \
-            --arg repo "$REPO" '
-            def esc: gsub("(?<c>[^A-Za-z0-9])"; "\\" + .c);
-            def size: if . >= 1048576 then ((. / 1048576 * 10 | round) / 10 | tostring) + " MB"
-                      else ((. / 1024 | round) | tostring) + " KB" end;
-            def fname: (.name | sub("[-_]?v?" + ($tag | ltrimstr("v") | esc); ""));
-            ($assets | map("⬇️ **[\(fname)](\(.browser_download_url))**  ·  \(.size | size)") | join("\n")) as $files
-            | {embeds: [{
-                author: {name: ("🆕 Nový release  ·  " + $repo)},
+            --arg published "$PUBLISHED" '
+            {embeds: [{
+                author: {name: "🆕 Nový release"},
                 title: $title,
-                url: $url,
+                url: $site,
                 description: (if ($body | length) > 0 then $body else "_Bez popisu zmien._" end),
                 color: (if $pre == "true" then 16096779 else 8141549 end),
-                fields: (if ($files | length) > 0 then [{name: "📦 Stiahnutie", value: $files[0:1000], inline: false}] else [] end),
+                fields: [{name: "📦 Stiahnutie", value: ("**[" + ($site | sub("^https?://"; "") | rtrimstr("/")) + "](" + $site + ")**"), inline: false}],
                 footer: ({text: ("Vydal " + $author + (if $pre == "true" then "  ·  predbežná verzia" else "" end))}
                          + (if ($avatar | length) > 0 then {icon_url: $avatar} else {} end)),
                 timestamp: (if ($published | length) > 0 then $published else null end)

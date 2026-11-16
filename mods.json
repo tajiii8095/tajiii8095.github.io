@@ -1,0 +1,56 @@
+[
+  {
+    "id": "tv-radio",
+    "game": "minecraft",
+    "name": "TV Radio FABRIC",
+    "desc": {
+      "sk": "Rádio a televízne vysielanie v Minecrafte: vysielače, veže, antény a televízory.",
+      "en": "Radio and TV broadcasting in Minecraft: transmitters, towers, antennas and televisions."
+    },
+    "mc": "Fabric 26.2",
+    "prefix": "tv-radio-mod",
+    "zaloha": [
+      "https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"
+    ],
+    "readme": {
+      "en": "README.md"
+    },
+    "gallery": [
+      {
+        "src": "https://cdn.modrinth.com/data/cached_images/9b0e366d53e6dcebb6605e7abae24e842918d870.png",
+        "cap": {
+          "sk": "Moderný televízor",
+          "en": "Modern Television"
+        }
+      },
+      {
+        "src": "https://cdn.modrinth.com/data/cached_images/06be25a3ea90f300c5eee1ed9cb1fb0e9995235b_0.webp",
+        "cap": {
+          "sk": "Rádiový vysielač",
+          "en": "Radio Transmitter"
+        }
+      },
+      {
+        "src": "https://cdn.modrinth.com/data/cached_images/f2679ea58ba317a2970b19ce268a416768ec5a40.png",
+        "cap": {
+          "sk": "Ovládací panel vysielačov",
+          "en": "Transmitter Control Panel"
+        }
+      },
+      {
+        "src": "https://cdn.modrinth.com/data/cached_images/d211716ec8a438f577b88311b4c66dea5d25ffe5.png",
+        "cap": {
+          "sk": "Digitálny (DVB-T) vysielač",
+          "en": "Digital (DVB-T) transmitter"
+        }
+      },
+      {
+        "src": "https://cdn.modrinth.com/data/cached_images/c008754425bd208bf61478c1a1922f628dd1c290.png",
+        "cap": {
+          "sk": "Analógový vysielač",
+          "en": "Analog transmitter"
+        }
+      }
+    ]
+  }
+]

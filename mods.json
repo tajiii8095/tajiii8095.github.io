@@ -52,5 +52,19 @@
         }
       }
     ]
+  },
+  {
+    "id": "tv-radio-neoforge",
+    "game": "minecraft",
+    "name": "TV Radio NEOFORGE",
+    "desc": {
+      "sk": "N",
+      "en": "N"
+    },
+    "mc": "NeoForge 26.2",
+    "prefix": "tv-radio-neoforge",
+    "zaloha": [],
+    "readme": {},
+    "gallery": []
   }
 ]

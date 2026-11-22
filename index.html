@@ -230,12 +230,12 @@ const MODS = [
       cap:{sk:"Analógový vysielač",en:"Analog transmitter"}}
    ]},
 
-  {id:"tv-radio-neoforge", game:"minecraft", name:"TV Radio (NeoForge)",
+  {id:"tv-radio-neoforge", game:"minecraft", name:"TV Radio NEOFORGE",
    desc:{sk:"Rádio a televízne vysielanie v Minecrafte pre NeoForge: vysielače, veže, antény a televízory.",en:"Radio and TV broadcasting in Minecraft for NeoForge: transmitters, towers, antennas and televisions."},
    mc:"NeoForge 26.2",
    prefix:"tv-radio-neoforge",   // súbory musia začínať týmto názvom, napr. tv-radio-neoforge-6.2.2.jar
    zaloha:[],
-   readme:{en:"mods/tv-radio-neoforge/README.md"},
+   readme:{en:"README.md"},   // použije sa popis z Fabric verzie, Fabric sa v ňom automaticky prepíše na NeoForge
    gallery:[
      {src:"https://cdn.modrinth.com/data/cached_images/9b0e366d53e6dcebb6605e7abae24e842918d870.png",
       cap:{sk:"Moderný televízor",en:"Modern Television"}},
@@ -392,7 +392,8 @@ async function loadReadme(m){
   box.innerHTML = `<p class="sub">${t("load")}</p>`;
   try {
     const r = await fetch(url, {cache:"no-cache"}); if (!r.ok) throw new Error("HTTP "+r.status);
-    const txt = await r.text();
+    let txt = await r.text();
+    if (m.swapFabric) txt = txt.replace(/Fabric/g,"NeoForge").replace(/FABRIC/g,"NEOFORGE");
     if (token !== readmeToken) return;
     box.innerHTML = mdToHtml(txt);
     fixMd(box, new URL(url, location.href));
@@ -674,7 +675,7 @@ async function loadAdminMods(){
   drawMods();
 }
 async function refreshLive(){
-  MODS.splice(0, MODS.length, ...adm.mods.map(cleanMod));
+  MODS.splice(0, MODS.length, ...adm.mods.map(cleanMod)); applyNeoForge();
   await loadVersions(); render(filter);
 }
 
@@ -809,11 +810,29 @@ document.querySelector(".lang").addEventListener("click", e => {
 applyLang();
 document.getElementById("content").innerHTML = `<p>${t("load")}</p>`;
 /* mods.json (ak existuje) má prednosť pred zoznamom MODS vyššie, ktorý slúži len ako záloha */
+const NF_BUILTIN = JSON.parse(JSON.stringify(MODS.find(m=>m.id==="tv-radio-neoforge")||null));
+/* NeoForge verzia je napevno v tomto súbore: prepíše kartu z mods.json (aj keď tam je zle vyplnená) alebo ju pridá */
+function applyNeoForge(){
+  if (!NF_BUILTIN) return;
+  const isNf = m => /neoforge/i.test(m.id+" "+m.name);
+  const old = MODS.find(isNf);
+  const fab = MODS.find(m => !isNf(m) && /tv-?radio/i.test(m.id+" "+m.name));
+  const nf = cleanMod(Object.assign({}, NF_BUILTIN, {
+    id: old ? old.id : NF_BUILTIN.id,
+    prefix: (old && old.prefix && old.prefix !== old.id) ? old.prefix : NF_BUILTIN.prefix,
+    zaloha: (old && old.zaloha && old.zaloha.length) ? old.zaloha : NF_BUILTIN.zaloha,
+    readme: (fab && fab.readme && (fab.readme.en||fab.readme.sk)) ? fab.readme : NF_BUILTIN.readme
+  }));
+  nf.swapFabric = true;
+  const i = old ? MODS.indexOf(old) : -1;
+  if (i >= 0) MODS[i] = nf; else MODS.push(nf);
+}
 async function loadMods(){
   try {
     const r = await fetch("mods.json", {cache:"no-cache"});
     if (r.ok) { const d = await r.json(); if (Array.isArray(d)) MODS.splice(0, MODS.length, ...d.filter(m=>m&&m.id&&m.name&&m.game).map(cleanMod)); }
   } catch(e){}
+  applyNeoForge();
 }
 loadMods().then(loadVersions).then(()=>{ render(filter); route(); });
 </script>

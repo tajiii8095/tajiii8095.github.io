@@ -17,7 +17,7 @@
     },
     "gallery": [
       {
-        "src": "https://ibb.co/VYkL1JxV",
+        "src": "https://cdn.modrinth.com/data/cached_images/9b0e366d53e6dcebb6605e7abae24e842918d870.png",
         "cap": {
           "sk": "Moderný televízor",
           "en": "Modern Television"
@@ -61,6 +61,7 @@
       "sk": "Rádio a televízne vysielanie v Minecrafte pre NeoForge: vysielače, veže, antény a televízory.",
       "en": "Radio and TV broadcasting in Minecraft for NeoForge: transmitters, towers, antennas and televisions."
     },
+    "icon": "images/banner-neoforge.png",
     "mc": "NeoForge 26.2",
     "prefix": "tv-radio-neoforge",
     "zaloha": [],

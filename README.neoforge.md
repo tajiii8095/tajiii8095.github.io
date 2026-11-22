@@ -1,7 +1,5 @@
 # TV + FM/LW/MW/SW Radio
 
-![TV Radio NeoForge](images/banner-neoforge.png)
-
 **NeoForge · Minecraft 26.2 · Java 25**
 
 One mod (ID `tvfmradio`) that combines two parts that work together:

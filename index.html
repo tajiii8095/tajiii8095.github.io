@@ -233,12 +233,11 @@ const MODS = [
   {id:"tv-radio-neoforge", game:"minecraft", name:"TV Radio NEOFORGE",
    desc:{sk:"Rádio a televízne vysielanie v Minecrafte pre NeoForge: vysielače, veže, antény a televízory.",en:"Radio and TV broadcasting in Minecraft for NeoForge: transmitters, towers, antennas and televisions."},
    mc:"NeoForge 26.2",
+   icon:"images/banner-neoforge.png",   // profilovka (náhľad na karte)
    prefix:"tv-radio-neoforge",   // súbory musia začínať týmto názvom, napr. tv-radio-neoforge-6.2.2.jar
    zaloha:[],
    readme:{en:"README.neoforge.md"},   // samostatný popis pre NeoForge (nahraj README.neoforge.md do koreňa repozitára)
    gallery:[
-     {src:"images/banner-neoforge.png",
-      cap:{sk:"TV Radio NeoForge",en:"TV Radio NeoForge"}},
      {src:"images/modern-tv.png",
       cap:{sk:"Moderný televízor",en:"Modern Television"}},
      {src:"images/radio-transmitter.webp",
@@ -337,8 +336,8 @@ async function loadVersions(){
 
 const dlTag = m => m.downloads==null ? "" : `<span class="tag" title="${t("dlTotal")}">⬇ ${m.downloads.toLocaleString(lang==="sk"?"sk-SK":"en-US")}</span>`;
 
-function thumbOf(m){ const g=(m.gallery||[])[0];
-  return g ? `<a class="thumb" href="#mod/${esc(m.id)}"><img loading="lazy" src="${esc(g.src)}" alt="${esc(m.name)}"></a>` : ""; }
+function thumbOf(m){ const g=(m.gallery||[])[0], src=m.icon||(g&&g.src);
+  return src ? `<a class="thumb" href="#mod/${esc(m.id)}"><img loading="lazy" src="${esc(src)}" alt="${esc(m.name)}"></a>` : ""; }
 
 function card(m){
   const [latest,...old] = m.versions;
@@ -646,7 +645,7 @@ const tm = k => TXM[lang][k];
 
 const cleanMod = m => ({id:m.id, game:m.game, name:m.name,
   desc:{sk:(m.desc&&m.desc.sk)||(m.desc&&m.desc.en)||"", en:(m.desc&&m.desc.en)||(m.desc&&m.desc.sk)||""},
-  mc:m.mc||"", prefix:(m.prefix||m.id||"").toLowerCase(), zaloha:m.zaloha||[], readme:m.readme||{},
+  icon:m.icon||"", mc:m.mc||"", prefix:(m.prefix||m.id||"").toLowerCase(), zaloha:m.zaloha||[], readme:m.readme||{},
   gallery:(m.gallery||[]).filter(g=>g&&g.src).map(g=>({src:g.src, cap:{sk:(g.cap&&g.cap.sk)||"", en:(g.cap&&g.cap.en)||""}}))});
 
 const b64 = s => { let bin=""; new TextEncoder().encode(s).forEach(c => bin += String.fromCharCode(c)); return btoa(bin); };
@@ -819,6 +818,10 @@ const NF_BUILTIN = JSON.parse(JSON.stringify(MODS.find(m=>m.id==="tv-radio-neofo
 function applyNeoForge(list){
   if (!NF_BUILTIN || !list) return list;
   if (!list.some(m => /neoforge/i.test(m.id+" "+m.name))) list.push(cleanMod(NF_BUILTIN));
+  /* profilovky (16:9) z priečinka images/ v repozitári; nastavia sa len ak mod ešte nemá vlastnú */
+  list.forEach(m => { if (m.icon) return;
+    if (/neoforge/i.test(m.id+" "+m.name)) m.icon = "images/banner-neoforge.png";
+    else if (/tv-?radio/i.test(m.id+" "+m.name)) m.icon = "images/banner-fabric.png"; });
   return list;
 }
 async function loadMods(){

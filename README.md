@@ -286,4 +286,5 @@ The **Transmitter Control Panel** is a console that lists all radio frequencies 
 *   The list of radio transmitters is saved in the file `fmradio_stations.tsv` in the world, so it survives a server restart.
 *   Each part of the mod has its own item IDs (`fmradio:` and `tvmod:`); for example `fmradio:fm_transmitter` is the FM transmitter, `fmradio:transmitter` is the AM transmitter and `tvmod:transmitter` is the DVB-T transmitter.
 *   The old FM/TV Mast, the TV Tower Antenna and the earlier concrete tower test blocks were removed in favour of the Broadcast Tower.
-*   Specific in-game texts may differ slightly from this description. **Author:** firi_tajiii8095
+*   Specific in-game texts may differ slightly from this description.
+*   **Author:** tajiii8095,firicek_44

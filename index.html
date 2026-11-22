@@ -215,37 +215,14 @@ const REPO = "tajiii8095/tajiii8095.github.io";   // repozitár, kde sú Release
 
 const MODS = [
   {id:"tv-radio", game:"minecraft", name:"TV Radio",
-   desc:{sk:"Rádio a televízne vysielanie v Minecrafte: vysielače, veže, antény a televízory.",en:"Radio and TV broadcasting in Minecraft: transmitters, towers, antennas and televisions."},
-   mc:"Fabric 26.2",
-   prefix:"tv-radio-mod",   // súbory modu musia začínať týmto názvom, napr. tv-radio-mod-6.3.0.jar
-   zaloha:["https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"],  // použije sa, ak GitHub nepovie nič
-
-   /* POPIS: Markdown súbor v tomto repozitári (zobrazí sa v detaile modu).
-      Stačí jeden (en), prípadne pridaj aj sk: "mods/tv-radio/README.sk.md".
-      Obrázky v README môžu byť odkazy (https://...) alebo cesty relatívne k tomuto súboru. */
-   readme:{en:"README.md"},
-
-   /* GALÉRIA: obrázky (url alebo cesta v repozitári) + popisky. Prvý je aj náhľad na karte. */
-   gallery:[
-     {src:"https://cdn.modrinth.com/data/cached_images/9b0e366d53e6dcebb6605e7abae24e842918d870.png",
-      cap:{sk:"Moderný televízor",en:"Modern Television"}},
-     {src:"https://cdn.modrinth.com/data/cached_images/06be25a3ea90f300c5eee1ed9cb1fb0e9995235b_0.webp",
-      cap:{sk:"Rádiový vysielač",en:"Radio Transmitter"}},
-     {src:"https://cdn.modrinth.com/data/cached_images/f2679ea58ba317a2970b19ce268a416768ec5a40.png",
-      cap:{sk:"Ovládací panel vysielačov",en:"Transmitter Control Panel"}},
-     {src:"https://cdn.modrinth.com/data/cached_images/d211716ec8a438f577b88311b4c66dea5d25ffe5.png",
-      cap:{sk:"Digitálny (DVB-T) vysielač",en:"Digital (DVB-T) transmitter"}},
-     {src:"https://cdn.modrinth.com/data/cached_images/c008754425bd208bf61478c1a1922f628dd1c290.png",
-      cap:{sk:"Analógový vysielač",en:"Analog transmitter"}}
-   ]},
-
-  {id:"tv-radio-neoforge", game:"minecraft", name:"TV Radio NEOFORGE",
-   desc:{sk:"Rádio a televízne vysielanie v Minecrafte pre NeoForge: vysielače, veže, antény a televízory.",en:"Radio and TV broadcasting in Minecraft for NeoForge: transmitters, towers, antennas and televisions."},
-   mc:"NeoForge 26.2",
-   icon:"images/banner-neoforge.png",   // profilovka (náhľad na karte)
-   prefix:"tv-radio-neoforge",   // súbory musia začínať týmto názvom, napr. tv-radio-neoforge-6.2.2.jar
-   zaloha:[],
-   readme:{sk:"README.neoforge.sk.md", en:"README.neoforge.md"},   // samostatný popis pre NeoForge (nahraj README.neoforge.md do koreňa repozitára)
+   desc:{sk:"Rádio a televízne vysielanie v Minecrafte pre Fabric aj NeoForge: vysielače, veže, antény a televízory.",en:"Radio and TV broadcasting in Minecraft for Fabric and NeoForge: transmitters, towers, antennas and televisions."},
+   mc:"Fabric / NeoForge 26.2",
+   icon:"images/banner-tv-radio.png",   // jedna profilovka (náhľad na karte)
+   prefix:"tv-radio-mod",
+   // súbory pre každý loader: názov súboru musí začínať týmto prefixom (napr. tv-radio-neoforge-6.3.8-mc26.2.jar)
+   prefixes:[{p:"tv-radio-mod",loader:"fabric"},{p:"tv-radio-neoforge",loader:"neoforge"}],
+   zaloha:["https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"],
+   readme:{sk:"README.sk.md", en:"README.md"},
    gallery:[
      {src:"images/modern-tv.png",
       cap:{sk:"Moderný televízor",en:"Modern Television"}},
@@ -327,6 +304,8 @@ const loaderOf = (name, m) => { const s=(String(name)+" "+m.mc).toLowerCase();
   for (const k of ["neoforge","fabric","quilt","forge"]) if (s.includes(k)) return k; return "other"; };
 const gameOf = (name, m) => { const a=String(name).match(/mc[-_]?(\d+(?:\.\d+)+)/i)||String(name).match(/\+(\d+(?:\.\d+)+)/);
   if (a) return a[1]; const b=String(m.mc).match(/(\d+(?:\.\d+)+)/); return b?b[1]:"?"; };
+const prefList = m => (m.prefixes&&m.prefixes.length) ? m.prefixes.map(x=>x.p) : [m.prefix];
+const prefLoader = (m, file) => { const f=String(file).toLowerCase(); const x=(m.prefixes||[]).find(x=>f.startsWith(x.p)); return x&&x.loader||""; };
 const baseName = u => decodeURIComponent(String(u).split("/").pop());
 const famKey = m => (m.name||"").toLowerCase().replace(/neoforge|fabric|forge|quilt/g,"").replace(/[^\p{L}\p{N}]+/gu,"");
 const cmp = (a,b) => { const x=a.split(".").map(Number), y=b.split(".").map(Number);
@@ -341,14 +320,14 @@ async function loadVersions(){
       if (rel.draft) continue;
       for (const a of rel.assets||[]){
         const low = a.name.toLowerCase();
-        for (const m of MODS) if (low.startsWith(m.prefix) && /\.(jar|zip)$/.test(low))
+        for (const m of MODS) if (prefList(m).some(p=>low.startsWith(p)) && /\.(jar|zip)$/.test(low))
           m.versions.push({file:a.name, v:verOf(a.name), date:(rel.published_at||"").slice(0,10), note:rel.name||"", url:a.browser_download_url, dc:a.download_count||0});
       }
     }
   } catch(e){}
   for (const m of MODS){
     if (!m.versions.length) m.versions = (m.zaloha||[]).map(u=>({file:baseName(u), v:verOf(u), date:"", note:"", url:u}));
-    for (const x of m.versions){ x.loader = loaderOf(x.file||"", m); x.mc = gameOf(x.file||"", m); }
+    for (const x of m.versions){ x.loader = prefLoader(m, x.file||"") || loaderOf(x.file||"", m); x.mc = gameOf(x.file||"", m); }
     m.versions.sort((a,b)=>cmp(a.v,b.v));
     m.downloads = m.versions.some(x=>x.dc!==undefined) ? m.versions.reduce((n,x)=>n+(x.dc||0),0) : null;
   }
@@ -363,6 +342,11 @@ function card(m){
   const [latest,...old] = m.versions;
   const more = `<a class="btn ghost" href="#mod/${esc(m.id)}">${t("detail")}</a>`;
   if (!latest) return `<div class="card">${thumbOf(m)}<h3>${esc(m.name)}</h3><p>${esc(m.desc[lang])}</p><span class="btn" style="opacity:.5">${t("na")}</span>${more}</div>`;
+  const multi = (m.prefixes||[]).length > 1;
+  if (multi) return `<div class="card">${thumbOf(m)}<h3>${esc(m.name)}</h3>
+    <div class="tags"><span class="tag dark">${esc(m.mc)}</span><span class="tag">v${esc(latest.v)}</span>${latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}${dlTag(m)}</div>
+    <p>${esc(m.desc[lang])}</p>
+    <a class="btn" href="#mod/${esc(m.id)}">${t("dl")}</a>${more}</div>`;
   const archive = old.length
     ? `<details><summary>${t("arch")} (${old.length})</summary><table><tr><th>${t("ver")}</th><th>${t("date")}</th><th></th></tr>`
       + old.map(o=>`<tr><td>${esc(o.v)}</td><td>${esc(o.date)}</td><td><a href="${esc(o.url)}">${t("dl")}</a></td></tr>`).join("")
@@ -463,9 +447,9 @@ function pickerHtml(m){
   const files = pkFiles(m);
   if (!files.length) return "";
   const games = [...new Set(files.map(f=>f.mc))].sort(cmp);
-  if (!games.includes(pk.game)) pk.game = games.includes(gameOf("",m)) ? gameOf("",m) : games[0];
-  const loaders = [...new Set(files.filter(f=>f.mc===pk.game).map(f=>f.loader))];
-  if (!loaders.includes(pk.loader)) pk.loader = loaders.includes(loaderOf("",m)) ? loaderOf("",m) : loaders[0];
+  if (!games.includes(pk.game)) pk.game = games[0];
+  const loaders = [...new Set(files.filter(f=>f.mc===pk.game).map(f=>f.loader))].sort((x,y)=>Object.keys(LOADERS).indexOf(x)-Object.keys(LOADERS).indexOf(y));
+  if (!loaders.includes(pk.loader)) pk.loader = loaders[0];
   const rows = files.filter(f=>f.mc===pk.game && f.loader===pk.loader).sort((a,b)=>cmp(a.v,b.v));
   const ln = k => LOADERS[k]||k;
   return `<div class="picker"><h4>${t("pickTitle")}</h4>
@@ -481,7 +465,8 @@ function pickerHtml(m){
 function renderDetail(m){
   const [latest] = m.versions;
   pk = {game:"", loader:""};
-  const dl = latest
+  const dl = (m.prefixes||[]).length > 1 ? ""
+    : latest
     ? `<a class="btn" href="${esc(latest.url)}">${t("dlv")}${esc(latest.v)}</a>`
     : `<span class="btn" style="opacity:.5">${t("na")}</span>`;
   document.getElementById("dbody").innerHTML =
@@ -691,7 +676,7 @@ const tm = k => TXM[lang][k];
 
 const cleanMod = m => ({id:m.id, game:m.game, name:m.name,
   desc:{sk:(m.desc&&m.desc.sk)||(m.desc&&m.desc.en)||"", en:(m.desc&&m.desc.en)||(m.desc&&m.desc.sk)||""},
-  icon:m.icon||"", mc:m.mc||"", prefix:(m.prefix||m.id||"").toLowerCase(), zaloha:m.zaloha||[], readme:m.readme||{},
+  icon:m.icon||"", prefixes:(m.prefixes||[]).filter(x=>x&&x.p).map(x=>({p:String(x.p).toLowerCase(),loader:x.loader||""})), mc:m.mc||"", prefix:(m.prefix||m.id||"").toLowerCase(), zaloha:m.zaloha||[], readme:m.readme||{},
   gallery:(m.gallery||[]).filter(g=>g&&g.src).map(g=>({src:g.src, cap:{sk:(g.cap&&g.cap.sk)||"", en:(g.cap&&g.cap.en)||""}}))});
 
 const b64 = s => { let bin=""; new TextEncoder().encode(s).forEach(c => bin += String.fromCharCode(c)); return btoa(bin); };
@@ -719,7 +704,7 @@ async function loadAdminMods(){
   adm.mods = null; adm.edit = null;
   try { const f = await getFile("mods.json"); if (f && f.content) adm.mods = JSON.parse(unb64(f.content)).map(cleanMod); } catch(e){}
   if (!adm.mods) adm.mods = MODS.map(cleanMod);   // mods.json ešte neexistuje: začni od modov zo stránky
-  applyNeoForge(adm.mods);
+  applyMerge(adm.mods);
   drawMods();
 }
 async function refreshLive(){
@@ -778,7 +763,7 @@ async function saveMod(){
   const btn = $id("msave"); btn.disabled = true; mStatus("", tm("mSaving"));
   try {
     const mod = {id, game, name, desc:{sk:dsk||den, en:den||dsk}, mc:v("m_mc"), prefix:(v("m_prefix")||id).toLowerCase(),
-                 zaloha:e.mod.zaloha||[], readme:Object.assign({}, e.mod.readme||{}), gallery:[]};
+                 zaloha:e.mod.zaloha||[], readme:Object.assign({}, e.mod.readme||{}), icon:e.mod.icon||"", prefixes:e.mod.prefixes||[], gallery:[]};
     for (const row of document.querySelectorAll("#m_gal .grow")) {
       let src = row.querySelector(".g-src").value.trim();
       const f = row.querySelector(".g-file").files[0];
@@ -858,16 +843,26 @@ document.querySelector(".lang").addEventListener("click", e => {
 applyLang();
 document.getElementById("content").innerHTML = `<p>${t("load")}</p>`;
 /* mods.json (ak existuje) má prednosť pred zoznamom MODS vyššie, ktorý slúži len ako záloha */
-const NF_BUILTIN = JSON.parse(JSON.stringify(MODS.find(m=>m.id==="tv-radio-neoforge")||null));
-/* NeoForge verzia je napevno v tomto súbore: ak v zozname modov (mods.json) žiadna nie je, pridá sa.
-   Keď ju uložíš v admin paneli, použije sa tá uložená. */
-function applyNeoForge(list){
-  if (!NF_BUILTIN || !list) return list;
-  if (!list.some(m => /neoforge/i.test(m.id+" "+m.name))) list.push(cleanMod(NF_BUILTIN));
-  /* profilovky (16:9) z priečinka images/ v repozitári; nastavia sa len ak mod ešte nemá vlastnú */
-  list.forEach(m => { if (m.icon) return;
-    if (/neoforge/i.test(m.id+" "+m.name)) m.icon = "images/banner-neoforge.png";
-    else if (/tv-?radio/i.test(m.id+" "+m.name)) m.icon = "images/banner-fabric.png"; });
+const MERGED_BUILTIN = JSON.parse(JSON.stringify(MODS.find(m=>m.id==="tv-radio")||null));
+const isTvRadio = m => /tv-?radio/i.test(m.id+" "+m.name);
+/* Fabric a NeoForge verzia sú jeden mod s výberom loadera. Staré samostatné karty z mods.json sa zlúčia do jednej. */
+function applyMerge(list){
+  if (!MERGED_BUILTIN || !list) return list;
+  if (!list.some(m => (m.prefixes||[]).length > 1)) {
+    const old = list.filter(isTvRadio);
+    const fab = old.find(m => !/neoforge/i.test(m.id+" "+m.name));
+    const keep = fab || old[0] || {};
+    const merged = cleanMod(Object.assign({}, MERGED_BUILTIN, {
+      id: keep.id || MERGED_BUILTIN.id,
+      gallery: (keep.gallery && keep.gallery.length) ? keep.gallery : MERGED_BUILTIN.gallery,
+      readme: Object.assign({}, MERGED_BUILTIN.readme, keep.readme || {}),
+      zaloha: (keep.zaloha && keep.zaloha.length) ? keep.zaloha : MERGED_BUILTIN.zaloha
+    }));
+    const at = old.length ? list.indexOf(old[0]) : list.length;
+    for (let k = list.length-1; k >= 0; k--) if (isTvRadio(list[k])) list.splice(k,1);
+    list.splice(Math.min(at,list.length), 0, merged);
+  }
+  list.forEach(m => { if (!m.icon && (m.prefixes||[]).length > 1) m.icon = MERGED_BUILTIN.icon; });
   return list;
 }
 async function loadMods(){
@@ -875,7 +870,7 @@ async function loadMods(){
     const r = await fetch("mods.json", {cache:"no-cache"});
     if (r.ok) { const d = await r.json(); if (Array.isArray(d)) MODS.splice(0, MODS.length, ...d.filter(m=>m&&m.id&&m.name&&m.game).map(cleanMod)); }
   } catch(e){}
-  applyNeoForge(MODS);
+  applyMerge(MODS);
 }
 loadMods().then(loadVersions).then(()=>{ render(filter); route(); });
 </script>

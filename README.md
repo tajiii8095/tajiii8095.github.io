@@ -1,6 +1,6 @@
 # TV + FM/LW/MW/SW Radio
 
-**Fabric · Minecraft 26.2 · Java 25**
+**Fabric · NeoForge · Minecraft 26.2 · Java 25**
 
 One mod (ID `tvfmradio`) that combines two parts that work together:
 
@@ -18,10 +18,10 @@ Both share the **Transmitter Control Panel**. In the creative menu you will find
 
 ## Requirements
 
-*   Fabric Loader 0.19.5+
-*   Fabric API
-*   Minecraft 26.2
-*   Java 25
+*   Minecraft 26.2 and Java 25
+*   **Fabric version:** Fabric Loader 0.19.5+ and Fabric API
+*   **NeoForge version:** NeoForge for Minecraft 26.2
+*   Pick the file for your loader (Fabric or NeoForge) in the download picker on the mod's page.
 *   The mod must be installed on the **server and** on every player's client.
 
 ***
@@ -42,7 +42,7 @@ Both share the **Transmitter Control Panel**. In the creative menu you will find
 
 ## Radio
 
-![Vysielač](https://cdn.modrinth.com/data/cached_images/06be25a3ea90f300c5eee1ed9cb1fb0e9995235b_0.webp)
+![Vysielač](images/radio-transmitter.webp)
 
 ### Bands
 
@@ -135,7 +135,7 @@ The **AM Transmitter** has to **touch a Transmitter Tower block** (any side). It
 
 ### Step by step
 
-![Modern Television](https://cdn.modrinth.com/data/cached_images/9b0e366d53e6dcebb6605e7abae24e842918d870.png)
+![Modern Television](images/modern-tv.png)
 
 1.  Build a **Broadcast Tower** with a **Platform** on top (see above).
 2.  Place a **TV Antenna** on a mounting post of the platform. Without it the TV transmitter will not broadcast.
@@ -155,9 +155,9 @@ The **AM Transmitter** has to **touch a Transmitter Tower block** (any side). It
 | Picture         | sharp, smooth, 20 fps | low resolution, noise, 10 fps |
 | Sound           | stereo                | mono, "telephone" sound       |
 
-![Analog transmitter](https://cdn.modrinth.com/data/cached_images/c008754425bd208bf61478c1a1922f628dd1c290.png)
+![Analog transmitter](images/analog-transmitter.png)
 
-![Digital transmitter](https://cdn.modrinth.com/data/cached_images/d211716ec8a438f577b88311b4c66dea5d25ffe5.png)
+![Digital transmitter](images/digital-transmitter.png)
 
 **TV range = base range + Broadcast Tower height × 50 blocks** (`towerRangePerBlock`). Example: DVB-T on a 21-block tower = 1,500 + 21 × 50 = **2,550 blocks**.
 
@@ -181,7 +181,7 @@ Right-click switches the nearest TV within 16 blocks to the next channel, **snea
 
 The **Transmitter Control Panel** is a console that lists all radio frequencies and TV channels on the tower it touches, including FM and TV transmitters joined to that tower by cable. For each one it shows the status (**ON AIR / NO SIGNAL / OFF**) and lets you switch it on or off.
 
-![Transmitter Control panel](https://cdn.modrinth.com/data/cached_images/f2679ea58ba317a2970b19ce268a416768ec5a40.png)
+![Transmitter Control panel](images/control-panel.png)
 
 **Remote control (Remote Link):**
 

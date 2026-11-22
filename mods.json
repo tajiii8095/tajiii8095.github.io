@@ -7,15 +7,6 @@
       "sk": "Rádio a televízne vysielanie v Minecrafte pre Fabric aj NeoForge: vysielače, veže, antény a televízory.",
       "en": "Radio and TV broadcasting in Minecraft for Fabric and NeoForge: transmitters, towers, antennas and televisions."
     },
-    "mc": "Fabric / NeoForge 26.2",
-    "prefix": "tv-radio-mod",
-    "zaloha": [
-      "https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"
-    ],
-    "readme": {
-      "sk": "README.sk.md",
-      "en": "README.md"
-    },
     "icon": "images/banner-tv-radio.png",
     "prefixes": [
       {
@@ -27,6 +18,15 @@
         "loader": "neoforge"
       }
     ],
+    "mc": "Fabric / NeoForge 26.2",
+    "prefix": "tv-radio-mod",
+    "zaloha": [
+      "https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"
+    ],
+    "readme": {
+      "sk": "README.sk.md",
+      "en": "README.md"
+    },
     "gallery": [
       {
         "src": "https://cdn.modrinth.com/data/cached_images/9b0e366d53e6dcebb6605e7abae24e842918d870.png",
@@ -64,5 +64,23 @@
         }
       }
     ]
+  },
+  {
+    "id": "krone-mega-kdlc",
+    "game": "ets2",
+    "name": "Krone Mega Liner by Sogard3 FIX",
+    "desc": {
+      "sk": "FIX for Sogard3 Krone mega liner mod",
+      "en": "FIX for Sogard3 Krone mega liner mod"
+    },
+    "mc": "ETS2 1.62",
+    "prefix": "krone_mega_kdlc",
+    "zaloha": [],
+    "readme": {
+      "en": "mods/krone-mega-kdlc/README.md"
+    },
+    "icon": "",
+    "prefixes": [],
+    "gallery": []
   }
 ]

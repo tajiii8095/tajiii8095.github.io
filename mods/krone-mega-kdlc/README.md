@@ -13,7 +13,7 @@ Fix for the **"Krone MegaLiner ADDON KRONE DLC"** mod (`krone_mega_kdlc_1.41` + 
 Order from top to bottom (the fix must be on top, above both original packages):
 
 1. **Krone MegaLiner KDLC - 1.62 Fix**
-2. `krone_mega_kdlc_1.43_fix`
+2. **krone_mega_kdlc_1.43_fix**
 3. **Krone MegaLiner ADDON KRONE DLC**
 
 Download Sogard3´s mod here:https://forum.scssoft.com/viewtopic.php?t=260235

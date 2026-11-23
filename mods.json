@@ -23,6 +23,7 @@
     "zaloha": [
       "https://github.com/tajiii8095/tajiii8095.github.io/releases/download/tvradio/tv-radio-mod-6.2.2.jar"
     ],
+    "sharemods": [],
     "readme": {
       "sk": "README.sk.md",
       "en": "README.md"
@@ -76,6 +77,13 @@
     "mc": "ETS2 1.62",
     "prefix": "krone_mega_kdlc",
     "zaloha": [],
+    "sharemods": [
+      {
+        "v": "1.0",
+        "url": "https://sharemods.com/au1tiysfqza9/krone_mega_kdlc_1_62_fix.zip.html",
+        "date": "2026-11-26"
+      }
+    ],
     "readme": {
       "en": "mods/krone-mega-kdlc/README.md"
     },

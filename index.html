@@ -207,7 +207,7 @@ const REPO = "tajiii8095/tajiii8095.github.io";   // repozitár, kde sú Release
    Kamarát sa musí pridať do repozitára ako collaborator (Settings > Collaborators), aby mohol ukladať. */
 const BRANDS = {
   tajiii:{name:"TajiiiMods", admin:"tajiii8095",         file:"mods.json", cats:"categories.json", ext:".jar · .scs", workflow:"discord-release.yml",        nick:"tajiii8095",         discord:"https://discord.gg/YTh3HkXet"},
-  firiii:{name:"FiriiiMods", admin:"firec123",  file:"mods-firiii.json", cats:"categories-firiii.json", ext:".jar", workflow:"discord-release-firiii.yml", nick:"DOPLN_DISCORD_NICK", discord:"https://discord.gg/YTh3HkXet"}
+  firiii:{name:"FiriiiMods", admin:["tajiii8095","DOPLN_GITHUB_MENO"],  file:"mods-firiii.json", cats:"categories-firiii.json", ext:".jar", workflow:"discord-release-firiii.yml", nick:"DOPLN_DISCORD_NICK", discord:"https://discord.gg/YTh3HkXet"}
 };
 const DEFAULT_CATS = {   // východiskové kategórie; menia sa v admin paneli (ukladajú sa do cats súboru)
   tajiii:[{id:"minecraft",label:"⛏️ Minecraft"},{id:"ets2",label:"🚛 Euro Truck Simulator 2",sm:true}],
@@ -527,7 +527,7 @@ document.getElementById("detail").addEventListener("click", e => {
    Stránka je statická a verejná, takže heslo v HTML by nič nechránilo. Preto sa prihlasuje GitHub tokenom:
    bez neho sa nedá nič odoslať, a webhook zostáva v GitHub Secrets (nikdy v tomto súbore). Test posiela
    GitHub Actions workflow discord-release.yml cez workflow_dispatch. */
-const ADMIN_USER = B.admin;            // len tento GitHub účet sa dostane dnu
+const ADMIN_USERS = [].concat(B.admin).map(x => x.toLowerCase());            // len tento GitHub účet sa dostane dnu
 const WORKFLOW   = B.workflow;   // súbor v .github/workflows/
 const TKEY = "gh_admin_token" + (BID && BID !== "tajiii" ? "_" + BID : "");
 const adm = { token:"", user:"", branch:"main", state:"out", msg:"", prev:{} };   // state: out | checking | in | denied
@@ -551,7 +551,10 @@ async function verifyAdmin(){
     if (!r.ok) throw new Error(t("admNoRepo"));
     const repo = await r.json();
     adm.user = me.login || "";
-    if (adm.user.toLowerCase() !== ADMIN_USER.toLowerCase() || !(repo.permissions && repo.permissions.push)) {
+    if (!ADMIN_USERS.includes(adm.user.toLowerCase()) || !(repo.permissions && repo.permissions.push)) {
+      const okUser = ADMIN_USERS.includes(adm.user.toLowerCase());
+      adm.why = okUser ? (lang === "sk" ? `účet ${adm.user} nemá právo zapisovať do repozitára (chýba prijatá pozvánka alebo scope „repo“ na tokene)` : `account ${adm.user} has no write access to the repository (invitation not accepted, or the token lacks the "repo" scope)`)
+                       : (lang === "sk" ? `prihlásený je GitHub účet „${adm.user}“, ale ten nie je v zozname povolených pre túto značku` : `you are signed in as GitHub account "${adm.user}", which is not on this brand's allowed list`);
       adm.state = "denied"; clearToken(); drawAdmin(); return;
     }
     adm.branch = repo.default_branch || "main";
@@ -582,7 +585,7 @@ function drawAdmin(){
     if (adm.mods) drawMods();
     return;
   }
-  const err = adm.state === "denied" ? t("admDenied") : adm.msg;
+  const err = adm.state === "denied" ? t("admDenied") + " " + (adm.why || "") : adm.msg;
   box.innerHTML =
     `<div class="acard"><h3>${t("admLogin")}</h3><p>${t("admLoginP")}</p>
        <form data-a="login" autocomplete="off">

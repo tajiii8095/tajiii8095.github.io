@@ -1,10 +1,11 @@
 name: Discord announcement for new ShareMods version
 
-# Runs whenever mods.json changes (the admin panel saves it after every mod add/edit).
+# Runs whenever a brand's mod list changes (the admin panel saves it after every mod add/edit).
 on:
   push:
     paths:
       - mods.json
+      - mods-firiii.json
 
 jobs:
   notify:
@@ -16,7 +17,8 @@ jobs:
 
       - name: Find new ShareMods versions and post to Discord
         env:
-          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}   # same secret as discord-release.yml
+          WEBHOOK_TAJIII: ${{ secrets.DISCORD_WEBHOOK }}          # same secret as discord-release.yml
+          WEBHOOK_FIRIII: ${{ secrets.DISCORD_WEBHOOK_FIRIII }}   # new secret for FiriiiMods
           AUTHOR: ${{ github.actor }}
           AVATAR: https://github.com/${{ github.actor }}.png
           SITE: https://tajiii8095.github.io
@@ -25,10 +27,15 @@ jobs:
           import json, os, re, subprocess, urllib.request, datetime
 
           SITE = os.environ["SITE"].rstrip("/")
+          # file, brand id, brand name, webhook env var
+          BRANDS = [
+              ("mods.json",        "tajiii", "TajiiiMods", "WEBHOOK_TAJIII"),
+              ("mods-firiii.json", "firiii", "FiriiiMods", "WEBHOOK_FIRIII"),
+          ]
 
-          def load(rev):
+          def load(rev, path):
               try:
-                  raw = subprocess.check_output(["git", "show", f"{rev}:mods.json"], stderr=subprocess.DEVNULL)
+                  raw = subprocess.check_output(["git", "show", f"{rev}:{path}"], stderr=subprocess.DEVNULL)
                   return json.loads(raw)
               except Exception:
                   return []
@@ -36,40 +43,43 @@ jobs:
           def vkey(v):
               return [int(x) for x in re.findall(r"\d+", str(v))] or [0]
 
-          old = {m["id"]: {x.get("url") for x in m.get("sharemods", [])} for m in load("HEAD~1")}
-          posts = []
-          for m in load("HEAD"):
-              known = old.get(m["id"], set())
-              added = [x for x in m.get("sharemods", []) if x.get("url") and x["url"] not in known]
-              if added:
-                  # several versions added at once (e.g. a new mod): post only the newest
-                  posts.append((m, max(added, key=lambda x: vkey(x.get("v")))))
-
-          if not posts:
-              print("No new ShareMods version.")
-              raise SystemExit(0)
-
           now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-          for m, x in posts:
-              d = m.get("desc") or {}
-              desc = (d.get("en") or d.get("sk") or "")[:1500]
-              v = str(x["v"]).lstrip("vV")
-              page = f"{SITE}/#mod/{m['id']}"
-              embed = {
-                  "author": {"name": "🆕 New release"},
-                  "title": f"{m['name']} v{v}",
-                  "url": page,
-                  "description": desc or "_No release notes._",
-                  "color": 8141549,
-                  "fields": [{"name": "📦 Download", "value": f"**[ShareMods]({x['url']})**  ·  [Mod page]({page})", "inline": False}],
-                  "footer": {"text": f"Released by {os.environ['AUTHOR']}", "icon_url": os.environ["AVATAR"]},
-                  "timestamp": now,
-              }
-              req = urllib.request.Request(
-                  os.environ["WEBHOOK"],
-                  data=json.dumps({"embeds": [embed]}).encode("utf-8"),
-                  headers={"Content-Type": "application/json", "User-Agent": "tajiiimods-notify"},
-              )
-              urllib.request.urlopen(req)
-              print("Sent:", m["name"], v)
+          for path, bid, bname, hook in BRANDS:
+              old = {m["id"]: {x.get("url") for x in m.get("sharemods", [])} for m in load("HEAD~1", path)}
+              posts = []
+              for m in load("HEAD", path):
+                  known = old.get(m["id"], set())
+                  added = [x for x in m.get("sharemods", []) if x.get("url") and x["url"] not in known]
+                  if added:
+                      # several versions added at once (e.g. a new mod): post only the newest
+                      posts.append((m, max(added, key=lambda x: vkey(x.get("v")))))
+              if not posts:
+                  print(f"{bname}: no new ShareMods version.")
+                  continue
+              webhook = os.environ.get(hook, "")
+              if not webhook:
+                  print(f"{bname}: webhook secret is not set, skipping.")
+                  continue
+              for m, x in posts:
+                  d = m.get("desc") or {}
+                  desc = (d.get("en") or d.get("sk") or "")[:1500]
+                  v = str(x["v"]).lstrip("vV")
+                  page = f"{SITE}/?brand={bid}#mod/{m['id']}"
+                  embed = {
+                      "author": {"name": f"🆕 New release · {bname}"},
+                      "title": f"{m['name']} v{v}",
+                      "url": page,
+                      "description": desc or "_No release notes._",
+                      "color": 8141549,
+                      "fields": [{"name": "📦 Download", "value": f"**[ShareMods]({x['url']})**  ·  [Mod page]({page})", "inline": False}],
+                      "footer": {"text": f"Released by {os.environ['AUTHOR']}", "icon_url": os.environ["AVATAR"]},
+                      "timestamp": now,
+                  }
+                  req = urllib.request.Request(
+                      webhook,
+                      data=json.dumps({"embeds": [embed]}).encode("utf-8"),
+                      headers={"Content-Type": "application/json", "User-Agent": "tajiiimods-notify"},
+                  )
+                  urllib.request.urlopen(req)
+                  print("Sent:", bname, m["name"], v)
           PY

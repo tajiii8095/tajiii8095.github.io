@@ -3,7 +3,11 @@ Krone MegaLiner KDLC - 1.62 Fix
 Fix for the "Krone MegaLiner ADDON KRONE DLC" mod (krone_mega_kdlc_1.41 + krone_mega_kdlc_1.43_fix) for ETS2 1.62.
 
 Requires: DLC Krone Trailer Pack, original krone_mega_kdlc_1.41, krone_mega_kdlc_1.43_fix.
-Load order in Mod Manager: this fix must be ABOVE (higher priority than) both original packages.
+Load order in Mod Manager: 
+Krone Mega liner fix 1.62
+Krone mega liner fix 1.43
+Krone Mega liner by Sogard3 
+Download: https://forum.scssoft.com/viewtopic.php?t=260235
 
 Fixes:
 - Material errors: "aux[1] not supported" removed from all /automat/ and vehicle materials (1.62 shaders)

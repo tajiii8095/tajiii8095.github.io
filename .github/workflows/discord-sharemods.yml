@@ -1,0 +1,76 @@
+name: Discord - nová verzia na ShareMods
+
+# Spustí sa vždy, keď sa v repozitári zmení mods.json
+# (admin panel ho ukladá po každom pridaní/úprave modu).
+on:
+  push:
+    paths:
+      - mods.json
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Nájsť nové ShareMods verzie a poslať na Discord
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, urllib.request
+
+          SITE = "https://tajiii8095.github.io"
+
+          def load(rev):
+              try:
+                  raw = subprocess.check_output(["git", "show", f"{rev}:mods.json"], stderr=subprocess.DEVNULL)
+                  return json.loads(raw)
+              except Exception:
+                  return []
+
+          def vkey(v):
+              import re
+              return [int(x) for x in re.findall(r"\d+", str(v))] or [0]
+
+          old = {m["id"]: {x.get("url") for x in m.get("sharemods", [])} for m in load("HEAD~1")}
+          new = load("HEAD")
+
+          posts = []
+          for m in new:
+              known = old.get(m["id"], set())
+              added = [x for x in m.get("sharemods", []) if x.get("url") and x["url"] not in known]
+              if not added:
+                  continue
+              # ak pribudlo viac verzií naraz (napr. nový mod), pošle sa len najnovšia
+              latest = max(added, key=lambda x: vkey(x.get("v")))
+              posts.append((m, latest))
+
+          if not posts:
+              print("Žiadna nová ShareMods verzia.")
+              raise SystemExit(0)
+
+          for m, x in posts:
+              desc = (m.get("desc") or {}).get("sk") or (m.get("desc") or {}).get("en") or ""
+              v = str(x["v"]).lstrip("vV")
+              embed = {
+                  "title": f"🚛 {m['name']} v{v}",
+                  "url": x["url"],
+                  "description": f"**Nová verzia modu je vonku!**\n\n[⬇️ Stiahnuť na ShareMods]({x['url']})\n[🌐 Stránka modu]({SITE}/#mod/{m['id']})",
+                  "color": 8141549,
+                  "footer": {"text": "TajiiiMods"},
+              }
+              if x.get("date"):
+                  embed["timestamp"] = None
+                  embed["footer"]["text"] += f" • {x['date']}"
+              embed = {k: val for k, val in embed.items() if val is not None}
+              req = urllib.request.Request(
+                  os.environ["DISCORD_WEBHOOK"],
+                  data=json.dumps({"embeds": [embed]}).encode("utf-8"),
+                  headers={"Content-Type": "application/json", "User-Agent": "tajiiimods-notify"},
+              )
+              urllib.request.urlopen(req)
+              print("Odoslané:", m["name"], v)
+          PY

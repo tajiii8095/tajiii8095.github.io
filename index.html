@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script>try{var q=new URLSearchParams(location.search).get("brand"),b=q||localStorage.getItem("brand");if(b==="firiii")document.documentElement.classList.add("brand-firiii")}catch(e){}</script>
 <title>TajiiiMods</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:dark;--black:#0a0a0f;--s1:#13131b;--s2:#1a1a25;--ink:#ececf4;--muted:#9494aa;--line:#262636;--soft:#1a1a26;--white:#13131b;--purple:#8b5cf6;--purple2:#b79dff;--purple3:#6d28d9;--hf:"Space Grotesk","Inter",system-ui,sans-serif;--glow:0 12px 40px rgba(139,92,246,.35)}
+:root{color-scheme:dark;--accr:139,92,246;--acc2r:183,157,255;--deep:109,40,217;--ph:#9b72ff;--g1:#e0d4ff;--g2:#a78bfa;--g3:#7c3aed;--o1:#c4b0ff;--o2:#7c3aed;--o3:#2a1060;--codec:#d4c5ff;--black:#0a0a0f;--s1:#13131b;--s2:#1a1a25;--ink:#ececf4;--muted:#9494aa;--line:#262636;--soft:#1a1a26;--white:#13131b;--purple:#8b5cf6;--purple2:#b79dff;--purple3:#6d28d9;--hf:"Space Grotesk","Inter",system-ui,sans-serif;--glow:0 12px 40px rgba(var(--accr),.35)}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
-body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--black);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;background-image:radial-gradient(900px 500px at 100% -5%,rgba(109,40,217,.28),transparent 70%)}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--black);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased;background-image:radial-gradient(900px 500px at 100% -5%,rgba(var(--deep),.28),transparent 70%)}
 a{color:inherit}::selection{background:var(--purple);color:#fff}:focus-visible{outline:2px solid var(--purple2);outline-offset:2px;border-radius:8px}
+html.brand-firiii{--purple:#e5383b;--purple2:#ff8f7a;--purple3:#b91c1c;--accr:229,56,59;--acc2r:255,143,122;--deep:153,27,27;--ph:#f25558;--g1:#ffe0cc;--g2:#ff7a5c;--g3:#dc2626;--o1:#ffb199;--o2:#dc2626;--o3:#3d0808;--codec:#ffc9bd;--glow:0 12px 40px rgba(229,56,59,.38)}
+.gcard[data-brand=firiii]{--purple:#e5383b;--purple2:#ff8f7a;--accr:229,56,59;--glow:0 12px 40px rgba(229,56,59,.38)}
 /* plávajúca lišta */
 header{position:sticky;top:0;z-index:20;padding:.8rem 1rem;pointer-events:none}
 .bar{pointer-events:auto;max-width:980px;margin:0 auto;padding:.5rem .6rem .5rem 1.3rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;border:1px solid var(--line);border-radius:999px;background:rgba(19,19,27,.72);backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);box-shadow:0 10px 40px rgba(0,0,0,.45)}
@@ -21,13 +24,13 @@ nav a{color:var(--muted);text-decoration:none;font-size:.92rem;font-weight:500;p
 /* hero */
 .hero{padding:3.5rem 1.2rem 4rem}
 .hin{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr .85fr;gap:2rem;align-items:center}
-.kick{display:inline-block;font:600 .78rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--purple2);border:1px solid rgba(183,157,255,.3);background:rgba(139,92,246,.1);padding:.3rem .8rem;border-radius:999px}
+.kick{display:inline-block;font:600 .78rem Inter,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--purple2);border:1px solid rgba(var(--acc2r),.3);background:rgba(var(--accr),.1);padding:.3rem .8rem;border-radius:999px}
 .hero h1{margin:1rem 0 0;font:700 clamp(2.4rem,6.2vw,4.6rem)/1.02 var(--hf);letter-spacing:-.045em}
-.hero h1 em{font-style:normal;background:linear-gradient(120deg,#e0d4ff,#a78bfa 55%,#7c3aed);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero h1 em{font-style:normal;background:linear-gradient(120deg,var(--g1),var(--g2) 55%,var(--g3));-webkit-background-clip:text;background-clip:text;color:transparent}
 .hero p{max-width:480px;margin:1.3rem 0 2rem;color:var(--muted);font-size:1.08rem}
-.cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--purple);color:#fff;text-decoration:none;padding:.9rem 1.8rem;border-radius:14px;font-weight:600;box-shadow:var(--glow);transition:.2s}.cta::after{content:"→";transition:transform .2s}.cta:hover{background:#9b72ff;transform:translateY(-2px)}.cta:hover::after{transform:translateX(4px)}
+.cta{display:inline-flex;align-items:center;gap:.5rem;background:var(--purple);color:#fff;text-decoration:none;padding:.9rem 1.8rem;border-radius:14px;font-weight:600;box-shadow:var(--glow);transition:.2s}.cta::after{content:"→";transition:transform .2s}.cta:hover{background:var(--ph);transform:translateY(-2px)}.cta:hover::after{transform:translateX(4px)}
 .hviz{position:relative;height:320px}
-.orb{position:absolute;inset:8% 10%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#c4b0ff,#7c3aed 45%,#2a1060 80%);filter:blur(2px);opacity:.85;box-shadow:0 0 120px rgba(139,92,246,.55)}
+.orb{position:absolute;inset:8% 10%;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--o1),var(--o2) 45%,var(--o3) 80%);filter:blur(2px);opacity:.85;box-shadow:0 0 120px rgba(var(--accr),.55)}
 .hc{position:absolute;padding:.8rem 1.2rem;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:rgba(19,19,27,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:600 1rem var(--hf);box-shadow:0 14px 40px rgba(0,0,0,.45)}
 .c1{left:0;top:12%;transform:rotate(-6deg)}.c2{right:0;top:42%;transform:rotate(5deg)}.c3{left:14%;bottom:6%;transform:rotate(-2deg);color:var(--purple2)}
 /* sekcie */
@@ -36,13 +39,13 @@ h2{margin:0 0 .4rem;font:700 clamp(1.8rem,4vw,2.5rem) var(--hf);letter-spacing:-
 .sub{color:var(--muted);margin:0 0 1.4rem}
 .chips{display:inline-flex;gap:.2rem;padding:.3rem;margin-bottom:.8rem;background:var(--s1);border:1px solid var(--line);border-radius:999px;flex-wrap:wrap}
 .chips button{border:0;background:none;color:var(--muted);padding:.5rem 1.2rem;border-radius:999px;cursor:pointer;font:600 .92rem Inter,sans-serif;transition:.2s}.chips button:hover{color:#fff}
-.chips button.active{background:var(--purple);color:#fff;box-shadow:0 4px 16px rgba(139,92,246,.45)}
+.chips button.active{background:var(--purple);color:#fff;box-shadow:0 4px 16px rgba(var(--accr),.45)}
 .gh{display:flex;align-items:center;gap:.7rem;margin:2.2rem 0 1rem;font:700 1.35rem var(--hf);letter-spacing:-.02em}.gh::before{content:"";width:6px;height:1.4em;border-radius:3px;background:linear-gradient(var(--purple2),var(--purple3))}
 /* karty = široké riadky */
 .grid{display:grid;gap:1rem}
 .card{display:grid;grid-template-columns:270px auto auto 1fr;column-gap:.7rem;align-content:start;padding:1rem;border:1px solid var(--line);border-radius:24px;background:linear-gradient(160deg,var(--s1),#0f0f16);transition:.25s}
-.card:hover{border-color:rgba(139,92,246,.6);box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 0 1px rgba(139,92,246,.25);transform:translateY(-3px)}
-.card::before{content:"⬡";display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(183,157,255,.5);grid-column:1;grid-row:1/span 8;min-height:150px;margin-right:.8rem;border-radius:16px;background:radial-gradient(circle at 30% 20%,rgba(139,92,246,.4),transparent 70%),var(--s2)}
+.card:hover{border-color:rgba(var(--accr),.6);box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 0 1px rgba(var(--accr),.25);transform:translateY(-3px)}
+.card::before{content:"⬡";display:flex;align-items:center;justify-content:center;font-size:3rem;color:rgba(var(--acc2r),.5);grid-column:1;grid-row:1/span 8;min-height:150px;margin-right:.8rem;border-radius:16px;background:radial-gradient(circle at 30% 20%,rgba(var(--accr),.4),transparent 70%),var(--s2)}
 .card:has(.thumb)::before{display:none}
 .card>.thumb{grid-column:1;grid-row:1/span 8;position:relative;display:block;margin:0 .8rem 0 0;min-height:150px;border-radius:16px;overflow:hidden;background:var(--s2)}
 .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s}.card:hover .thumb img{transform:scale(1.06)}
@@ -50,17 +53,17 @@ h2{margin:0 0 .4rem;font:700 clamp(1.8rem,4vw,2.5rem) var(--hf);letter-spacing:-
 .card>.btn{grid-column:2;justify-self:start;margin-top:.9rem}.card>.btn.ghost{grid-column:3}
 .card h3{margin:.2rem 0 .5rem;font:700 1.3rem var(--hf);letter-spacing:-.025em}
 .tags{margin-bottom:.5rem}
-.tag{display:inline-block;font-size:.72rem;font-weight:600;padding:.18rem .7rem;border-radius:999px;background:rgba(139,92,246,.14);color:var(--purple2);margin:0 .3rem .3rem 0}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;padding:.18rem .7rem;border-radius:999px;background:rgba(var(--accr),.14);color:var(--purple2);margin:0 .3rem .3rem 0}
 .tag.dark{background:var(--ink);color:var(--black)}
 .card p{margin:0;color:var(--muted);font-size:.95rem}
 .btn{display:inline-block;text-align:center;background:var(--purple);color:#fff;text-decoration:none;padding:.65rem 1.3rem;border-radius:12px;font-weight:600;font-size:.92rem;transition:.2s}
-.btn:hover{background:#9b72ff;box-shadow:0 8px 24px rgba(139,92,246,.4)}
+.btn:hover{background:var(--ph);box-shadow:0 8px 24px rgba(var(--accr),.4)}
 .btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}.btn.ghost:hover{background:var(--s2);border-color:var(--purple2);box-shadow:none}
 details{margin-top:.9rem}summary{cursor:pointer;font-weight:600;color:var(--purple2);font-size:.9rem}
 table{width:100%;border-collapse:collapse;margin-top:.6rem;font-size:.85rem}th,td{text-align:left;padding:.45rem .3rem;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:500}td a{color:var(--purple2);font-weight:600}
 /* kontakt */
 .about{max-width:1100px;margin:1rem auto 3rem;padding:0 1.2rem}
-.about .in{padding:2.6rem;border:1px solid var(--line);border-radius:28px;background:radial-gradient(500px 240px at 100% 0%,rgba(139,92,246,.3),transparent 70%),var(--s1)}
+.about .in{padding:2.6rem;border:1px solid var(--line);border-radius:28px;background:radial-gradient(500px 240px at 100% 0%,rgba(var(--accr),.3),transparent 70%),var(--s1)}
 .about p{color:var(--muted);max-width:560px}.dc{margin:1.2rem 0 .6rem}.dcbtn{padding:.8rem 1.6rem;border-radius:14px}.dcnick{margin:0}.dcnick strong{color:#fff}
 footer{color:var(--muted);text-align:center;padding:1.5rem 1rem 2.2rem;font-size:.85rem;border-top:1px solid var(--line)}.adm{text-decoration:none;opacity:.35;margin-left:.6rem}.adm:hover{opacity:1}
 /* detail: dva stĺpce */
@@ -70,7 +73,7 @@ body.detail-open .hero,body.detail-open #mody,body.detail-open .about{display:no
 #dbody{display:grid;grid-template-columns:minmax(0,1fr) 340px;column-gap:2rem;align-items:start}
 #dbody>*{grid-column:1}#dbody>.dhead{grid-column:1/-1}
 #dbody>#pkbox{grid-column:2;grid-row:2/span 40;position:sticky;top:5.5rem}
-.dhead{display:flex;gap:1.2rem;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:1.6rem;padding:1.8rem;border:1px solid var(--line);border-radius:28px;background:radial-gradient(500px 220px at 0% 0%,rgba(139,92,246,.28),transparent 70%),var(--s1)}
+.dhead{display:flex;gap:1.2rem;justify-content:space-between;align-items:center;flex-wrap:wrap;margin-bottom:1.6rem;padding:1.8rem;border:1px solid var(--line);border-radius:28px;background:radial-gradient(500px 220px at 0% 0%,rgba(var(--accr),.28),transparent 70%),var(--s1)}
 .dhead h1{margin:0 0 .6rem;font:700 clamp(1.8rem,4.5vw,2.8rem) var(--hf);letter-spacing:-.04em;line-height:1.05}.dhead .btn{padding:.85rem 1.7rem}.dl-box{min-width:200px}.dl-box details{margin-top:.6rem}
 .picker{border:1px solid var(--line);border-radius:22px;padding:1.2rem;background:var(--s1)}
 .picker h4{margin:0 0 .9rem;font-size:.78rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.1em}
@@ -85,7 +88,7 @@ body.detail-open .hero,body.detail-open #mody,body.detail-open .about{display:no
 .gal-thumbs button{flex:0 0 auto;width:110px;aspect-ratio:16/10;padding:0;border:2px solid var(--line);border-radius:12px;overflow:hidden;cursor:pointer;background:#000;opacity:.65;transition:.2s}.gal-thumbs button.on{border-color:var(--purple);opacity:1}.gal-thumbs button:hover{opacity:1}.gal-thumbs img{width:100%;height:100%;object-fit:cover;display:block}
 .md{overflow-wrap:anywhere}.md h1{font:700 1.9rem var(--hf);margin:1.6rem 0 .6rem}.md h2{font:700 1.5rem var(--hf);margin:2.2rem 0 .6rem;padding-bottom:.3rem;border-bottom:1px solid var(--line)}.md h3{font-size:1.2rem;margin:1.6rem 0 .4rem}.md h4{font-size:1.05rem;margin:1.2rem 0 .3rem}
 .md p,.md li{color:#c9c9d8}.md li{margin:.25rem 0}.md a{color:var(--purple2);font-weight:600}.md img{max-width:100%;height:auto;border-radius:12px;border:1px solid var(--line);margin:.4rem 0}
-.md code{background:var(--s2);color:#d4c5ff;padding:.1rem .4rem;border-radius:6px;font-size:.88em}.md pre{background:#07070b;color:#e8e8f2;padding:1rem;border-radius:14px;overflow-x:auto;border:1px solid var(--line)}.md pre code{background:none;color:inherit;padding:0}
+.md code{background:var(--s2);color:var(--codec);padding:.1rem .4rem;border-radius:6px;font-size:.88em}.md pre{background:#07070b;color:#e8e8f2;padding:1rem;border-radius:14px;overflow-x:auto;border:1px solid var(--line)}.md pre code{background:none;color:inherit;padding:0}
 .md blockquote{margin:1rem 0;padding:.6rem 1rem;border-left:4px solid var(--purple);background:var(--s1);border-radius:0 12px 12px 0}.md blockquote p{margin:.3rem 0}.md hr{border:0;height:1px;background:var(--line);margin:2rem 0}
 .md .tw{overflow-x:auto;margin:.8rem 0}.md table{font-size:.9rem;min-width:420px}.md th,.md td{padding:.5rem .6rem;vertical-align:top}.md th{background:var(--s1);color:var(--ink)}
 .lb{position:fixed;inset:0;z-index:50;background:rgba(5,5,8,.95);display:none;align-items:center;justify-content:center;flex-direction:column;padding:1rem}.lb.open{display:flex}
@@ -98,11 +101,11 @@ body.admin-open .hero,body.admin-open #mody,body.admin-open .about,body.admin-op
 .acard{border:1px solid var(--line);border-radius:22px;padding:1.4rem;margin-bottom:1.2rem;background:var(--s1)}
 .acard h3{margin:0 0 .3rem;font:700 1.15rem var(--hf)}.acard p{color:var(--muted);font-size:.92rem;margin:.2rem 0 1rem}.acard label{display:block;font-weight:600;font-size:.9rem;margin:.9rem 0 .35rem}
 .acard input[type=text],.acard input[type=password],.acard textarea,.acard select{width:100%;font:inherit;padding:.65rem .8rem;border:1px solid var(--line);border-radius:12px;background:var(--black);color:var(--ink)}
-.acard input:focus,.acard textarea:focus,.acard select:focus{outline:0;border-color:var(--purple);box-shadow:0 0 0 3px rgba(139,92,246,.22)}
+.acard input:focus,.acard textarea:focus,.acard select:focus{outline:0;border-color:var(--purple);box-shadow:0 0 0 3px rgba(var(--accr),.22)}
 .acard textarea{min-height:110px;resize:vertical}.acard textarea.tall{min-height:220px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.88rem}.acard input[readonly]{opacity:.7}
 .chk{display:flex;align-items:center;gap:.5rem;font-weight:500;margin:.9rem 0 0}.chk input{width:1.05rem;height:1.05rem;accent-color:var(--purple)}
 .arow{display:flex;gap:.7rem;align-items:center;flex-wrap:wrap;margin-top:1.1rem}
-.abtn{border:0;cursor:pointer;font:inherit;font-weight:600;background:var(--purple);color:#fff;padding:.7rem 1.4rem;border-radius:12px;transition:.2s}.abtn:hover{background:#9b72ff}.abtn:disabled{opacity:.5;cursor:default}
+.abtn{border:0;cursor:pointer;font:inherit;font-weight:600;background:var(--purple);color:#fff;padding:.7rem 1.4rem;border-radius:12px;transition:.2s}.abtn:hover{background:var(--ph)}.abtn:disabled{opacity:.5;cursor:default}
 .abtn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}.abtn.ghost:hover{background:var(--s2);border-color:var(--purple2)}
 .who{display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}.who b{color:var(--purple2)}
 .astat{margin-top:1rem;padding:.7rem .9rem;border-radius:12px;font-size:.92rem;background:var(--s2);display:none;overflow-wrap:anywhere}.astat.show{display:block}.astat.ok{background:rgba(34,197,94,.12);color:#86efac}.astat.err{background:rgba(239,68,68,.12);color:#fca5a5}
@@ -121,7 +124,7 @@ body.gate-open .hero,body.gate-open #mody,body.gate-open .about,body.gate-open #
 body.gate-open nav a,body.gate-open footer .adm{display:none}
 #gate h1{margin:0 0 .6rem;font:700 clamp(2rem,5vw,3.2rem) var(--hf);letter-spacing:-.04em}
 .gcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:2rem}
-.gcard{display:flex;flex-direction:column;align-items:flex-start;gap:2.2rem;text-align:left;cursor:pointer;color:var(--ink);padding:1.8rem;border:1px solid var(--line);border-radius:28px;background:radial-gradient(420px 200px at 100% 0%,rgba(139,92,246,.3),transparent 70%),var(--s1);transition:.25s;font:inherit}
+.gcard{display:flex;flex-direction:column;align-items:flex-start;gap:2.2rem;text-align:left;cursor:pointer;color:var(--ink);padding:1.8rem;border:1px solid var(--line);border-radius:28px;background:radial-gradient(420px 200px at 100% 0%,rgba(var(--accr),.3),transparent 70%),var(--s1);transition:.25s;font:inherit}
 .gcard b{font:700 2rem var(--hf);letter-spacing:-.04em}.gcard b span{color:var(--purple2)}
 .gcard i{font-style:normal;font-weight:600;color:var(--purple2)}
 .gcard:hover{border-color:var(--purple);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.5),var(--glow)}
@@ -156,9 +159,6 @@ body.gate-open nav a,body.gate-open footer .adm{display:none}
   <h2 data-i="mods"></h2>
   <p class="sub" data-i="sub"></p>
   <div class="chips" id="tabs">
-    <button data-f="all" class="active" data-i="all"></button>
-    <button data-f="minecraft">Minecraft</button>
-    <button data-f="ets2">ETS2</button>
   </div>
   <div id="content"></div>
 </section>
@@ -206,8 +206,12 @@ const REPO = "tajiii8095/tajiii8095.github.io";   // repozitár, kde sú Release
 /* ZNAČKY: každá má vlastný zoznam modov (file), vlastný admin (GitHub účet) a vlastný Discord workflow.
    Kamarát sa musí pridať do repozitára ako collaborator (Settings > Collaborators), aby mohol ukladať. */
 const BRANDS = {
-  tajiii:{name:"TajiiiMods", admin:"tajiii8095",         file:"mods.json",        workflow:"discord-release.yml",        nick:"tajiii8095",         discord:"https://discord.gg/YTh3HkXet"},
-  firiii:{name:"FiriiiMods", admin:"DOPLN_GITHUB_MENO",  file:"mods-firiii.json", workflow:"discord-release-firiii.yml", nick:"DOPLN_DISCORD_NICK", discord:"https://discord.gg/YTh3HkXet"}
+  tajiii:{name:"TajiiiMods", admin:"tajiii8095",         file:"mods.json", cats:"categories.json", ext:".jar · .scs", workflow:"discord-release.yml",        nick:"tajiii8095",         discord:"https://discord.gg/YTh3HkXet"},
+  firiii:{name:"FiriiiMods", admin:"DOPLN_GITHUB_MENO",  file:"mods-firiii.json", cats:"categories-firiii.json", ext:".jar", workflow:"discord-release-firiii.yml", nick:"DOPLN_DISCORD_NICK", discord:"https://discord.gg/YTh3HkXet"}
+};
+const DEFAULT_CATS = {   // východiskové kategórie; menia sa v admin paneli (ukladajú sa do cats súboru)
+  tajiii:[{id:"minecraft",label:"⛏️ Minecraft"},{id:"ets2",label:"🚛 Euro Truck Simulator 2",sm:true}],
+  firiii:[{id:"minecraft",label:"⛏️ Minecraft"}]
 };
 let BID = null;
 try { const q = new URLSearchParams(location.search).get("brand");   // odkaz ?brand=firiii vyberie značku rovno
@@ -215,6 +219,7 @@ try { const q = new URLSearchParams(location.search).get("brand");   // odkaz ?b
 if (!BRANDS[BID]) BID = null;
 const B = BRANDS[BID || "tajiii"];
 if (!BID) document.body.classList.add("gate-open");
+document.documentElement.classList.toggle("brand-firiii", BID === "firiii");
 
 const MODS = [
   {id:"tv-radio", game:"minecraft", name:"TV Radio",
@@ -300,8 +305,19 @@ function applyLang(){
   document.querySelectorAll("[data-ih]").forEach(e => e.innerHTML = t(e.dataset.ih));
   document.querySelectorAll(".lang button").forEach(b => b.classList.toggle("on", b.dataset.l === lang));
 }
-const GAMES = {minecraft:"⛏️ Minecraft", ets2:"🚛 Euro Truck Simulator 2"};
+const GAMES = {}, CATSM = new Set();   // id kategórie -> názov; CATSM = kategórie so sťahovaním cez ShareMods
+let CATS = [];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const plain = l => String(l).replace(/^[^\p{L}\p{N}]+/u, "");
+function setCats(list){
+  CATS = list.filter(c => c && c.id && c.label).map(c => ({id:String(c.id), label:String(c.label), sm:!!c.sm}));
+  Object.keys(GAMES).forEach(k => delete GAMES[k]); CATSM.clear();
+  CATS.forEach(c => { GAMES[c.id] = c.label; if (c.sm) CATSM.add(c.id); });
+  const em = CATS.map(c => "<em>" + esc(plain(c.label)) + "</em>");
+  const j = and => em.length < 2 ? em.join("") : em.slice(0,-1).join(", ") + "<br>" + and + " " + em[em.length-1];
+  TX.sk.hero = "Mody pre " + j("a"); TX.en.hero = "Mods for " + j("and");
+}
+setCats(DEFAULT_CATS[BID || "tajiii"]);
 const stripMc = n => String(n).replace(/[-_+.]?mc[-_]?\d+(?:\.\d+)+/ig,"").replace(/\+\d+(?:\.\d+)+(?=[-_.+]|$)/g,"");
 const verOf = n => (stripMc(n).match(/(\d+(?:\.\d+)+)/)||[,"?"])[1];
 const LOADERS = {fabric:"Fabric", neoforge:"NeoForge", forge:"Forge", quilt:"Quilt"};
@@ -644,11 +660,13 @@ $id("admin").addEventListener("click", e => {
   const a = b.dataset.a;
   if (a === "send") sendTest();
   else if (a === "runs") loadRuns();
-  else if (a === "madd") { adm.edit = {isNew:true, index:-1, mod:{id:"",game:"minecraft",name:"",desc:{sk:"",en:""},mc:"",prefix:"",zaloha:[],readme:{},gallery:[]}}; drawMods(); }
+  else if (a === "madd") { adm.edit = {isNew:true, index:-1, mod:{id:"",game:(CATS[0]||{}).id||"minecraft",name:"",desc:{sk:"",en:""},mc:"",prefix:"",zaloha:[],readme:{},gallery:[]}}; drawMods(); }
   else if (a === "medit") startEdit(+b.dataset.i);
   else if (a === "mdel") delMod(+b.dataset.i);
   else if (a === "mcancel") { adm.edit = null; drawMods(); }
   else if (a === "msave") saveMod();
+  else if (a === "cadd") addCat();
+  else if (a === "cdel") delCat(+b.dataset.i);
   else if (a === "mgadd") $id("m_gal").insertAdjacentHTML("beforeend", galRow({}));
   else if (a === "smadd") $id("m_sm").insertAdjacentHTML("beforeend", smRow({}));
   else if (a === "smdel") b.closest(".smrow").remove();
@@ -660,7 +678,7 @@ $id("admin").addEventListener("click", e => {
 });
 $id("admin").addEventListener("change", e => {
   const el = e.target;
-  if (el.id === "m_game") { const b = $id("m_smbox"); if (b) b.hidden = el.value !== "ets2"; }
+  if (el.id === "m_game") { const b = $id("m_smbox"); if (b) b.hidden = !CATSM.has(el.value); }
   else if (el.id === "m_multi") { addFiles([...el.files]); el.value = ""; }
   else if (el.classList.contains("g-file")) attachFile(el.closest(".grow"), el.files[0] || null);
   else if (el.classList.contains("g-src")) { const r = el.closest(".grow"); attachFile(r, null); setRowPrev(r, prevSrc(el.value.trim())); }
@@ -705,6 +723,8 @@ const TXM = {
       mFail:"Saving failed",mFail403:"The token lacks Contents: Read and write on this repository."}
 };
 const tm = k => TXM[lang][k];
+Object.assign(TXM.sk,{mGame:"Kategória",cT:"Kategórie",cP:"Kategórie, v ktorých sú tvoje mody (napr. hra). Zobrazia sa ako filtre a skupiny na stránke.",cName:"Nová kategória (môže začínať emoji)",cSm:"Sťahovanie cez ShareMods (namiesto GitHub Releases)",cAdd:"+ Pridať kategóriu",cUsed:"Kategória sa používa alebo je posledná",cSaved:"✅ Kategórie uložené.",cExists:"Takáto kategória už existuje.",cDelQ:"Naozaj zmazať kategóriu"});
+Object.assign(TXM.en,{mGame:"Category",cT:"Categories",cP:"The categories your mods belong to (e.g. a game). They appear as filters and groups on the site.",cName:"New category (may start with an emoji)",cSm:"Download via ShareMods (instead of GitHub Releases)",cAdd:"+ Add category",cUsed:"The category is in use or is the last one",cSaved:"✅ Categories saved.",cExists:"This category already exists.",cDelQ:"Really delete the category"});
 Object.assign(TXM.sk,{mSm:"Stiahnutie cez ShareMods (ETS2)",mSmH:"Pridaj odkazy na ShareMods pre každú verziu. Najnovšia je na karte, staršie idú do archívu.",mSmV:"Verzia (napr. 1.2)",mSmU:"ShareMods odkaz (https://sharemods.com/…)",mSmD:"Dátum (voliteľné, RRRR-MM-DD)",mSmAdd:"+ Pridať odkaz",mSmBad:"Pri každom ShareMods odkaze vyplň verziu a odkaz začínajúci https://",mGalH:"Obrázky môžeš presunúť do rámika, alebo vybrať z disku (aj viac naraz). Poradie meníš šípkami. Veľké obrázky sa pred nahratím zmenšia na max. 1920 px.",
   mUrl:"URL obrázka (alebo nahraj súbor nižšie)",mDrop:"📷 Presuň sem obrázky alebo klikni a vyber",mWill:"nahrá sa pri uložení",
   mIcon:"Ikona na karte modu",mIconH:"Náhľad na úvodnej stránke. Ak ju necháš prázdnu, použije sa prvý obrázok galérie.",mIconUrl:"URL ikony (alebo nahraj súbor)"});
@@ -742,6 +762,7 @@ function mStatus(kind, text){ const el = $id("mstat"); if (!el) return; el.class
 async function loadAdminMods(){
   adm.mods = null; adm.edit = null;
   try { const f = await getFile(B.file); if (f && f.content) adm.mods = JSON.parse(unb64(f.content)).map(cleanMod); } catch(e){}
+  try { const cf = await getFile(B.cats); if (cf && cf.content) { const c = JSON.parse(unb64(cf.content)); if (Array.isArray(c) && c.length) { setCats(c); applyBrandUI(); } } } catch(e){}
   if (!adm.mods) adm.mods = MODS.map(cleanMod);   // mods.json ešte neexistuje: začni od modov zo stránky
   applyMerge(adm.mods);
   drawMods();
@@ -838,7 +859,7 @@ function formHtml(m, isNew){
     <label for="m_id">${tm("mId")}</label><input type="text" id="m_id" value="${esc(m.id)}" ${isNew?"":"readonly"} maxlength="60">${isNew?`<p class="hint">${tm("mIdH")}</p>`:""}
     <label for="m_game">${tm("mGame")}</label><select id="m_game">${games}</select>
     <label for="m_mc">${tm("mMc")}</label><input type="text" id="m_mc" value="${esc(m.mc)}" maxlength="60"><p class="hint">${tm("mMcH")}</p>
-    <div id="m_smbox"${m.game==="ets2"?"":" hidden"}><label>${tm("mSm")}</label><p class="hint" style="margin:0 0 .6rem">${tm("mSmH")}</p>
+    <div id="m_smbox"${CATSM.has(m.game)?"":" hidden"}><label>${tm("mSm")}</label><p class="hint" style="margin:0 0 .6rem">${tm("mSmH")}</p>
       <div id="m_sm">${(m.sharemods||[]).map(smRow).join("")}</div>
       <button type="button" class="abtn ghost" data-a="smadd">${tm("mSmAdd")}</button></div>
     <label for="m_prefix">${tm("mPrefix")}</label><input type="text" id="m_prefix" value="${esc(m.prefix)}" maxlength="80"><p class="hint">${tm("mPrefixH")}</p>
@@ -863,7 +884,7 @@ function drawMods(){
           <td style="text-align:right;white-space:nowrap"><button class="abtn ghost" data-a="medit" data-i="${i}">${tm("mEdit")}</button> <button class="abtn ghost" data-a="mdel" data-i="${i}" aria-label="Delete">✕</button></td></tr>`).join("") + `</table>`
       : `<p>${tm("mEmpty")}</p>`)
     + `<div class="arow"><button class="abtn" data-a="madd">${tm("mAdd")}</button></div>
-       <p class="anote">${tm("mHowDl")}</p><div class="astat" id="mstat"></div></div>`;
+       <p class="anote">${tm("mHowDl")}</p><div class="astat" id="mstat"></div></div>` + catsHtml();
 }
 async function startEdit(i){
   const m = adm.mods[i]; adm.edit = {isNew:false, index:i, mod:m}; drawMods();
@@ -878,7 +899,7 @@ async function saveMod(){
   if (!name || !id || !game || !(dsk || den)) { mStatus("err", tm("mNeed")); return; }
   if (e.isNew && adm.mods.some(x => x.id === id)) { mStatus("err", tm("mDup")); return; }
   let sharemods = [];
-  if (game === "ets2") {
+  if (CATSM.has(game)) {
     for (const r of document.querySelectorAll("#m_sm .smrow")) {
       const x = {v:r.querySelector(".sm-v").value.trim(), url:r.querySelector(".sm-u").value.trim(), date:r.querySelector(".sm-d").value.trim()};
       if (!x.v && !x.url) continue;
@@ -997,13 +1018,51 @@ function applyMerge(list){
   return list;
 }
 async function loadMods(){
+  try { const r2 = await fetch(B.cats, {cache:"no-cache"}); if (r2.ok) { const c = await r2.json(); if (Array.isArray(c) && c.length) setCats(c); } } catch(e){}
   try {
     const r = await fetch(B.file, {cache:"no-cache"});
     if (r.ok) { const d = await r.json(); if (Array.isArray(d)) MODS.splice(0, MODS.length, ...d.filter(m=>m&&m.id&&m.name&&m.game).map(cleanMod)); }
   } catch(e){}
   applyMerge(MODS);
 }
-loadMods().then(loadVersions).then(()=>{ render(filter); route(); });
+function applyBrandUI(){
+  const tabs = document.getElementById("tabs");
+  if (filter !== "all" && !GAMES[filter]) filter = "all";
+  tabs.innerHTML = `<button data-f="all" class="${filter==="all"?"active":""}" data-i="all"></button>`
+    + CATS.map(c => `<button data-f="${esc(c.id)}" class="${filter===c.id?"active":""}">${esc(plain(c.label))}</button>`).join("");
+  tabs.style.display = CATS.length < 2 ? "none" : "";
+  document.querySelector(".kick").textContent = CATS.map(c => plain(c.label)).join(" · ");
+  const c1 = document.querySelector(".c1"), c2 = document.querySelector(".c2");
+  c1.textContent = CATS[0] ? CATS[0].label : ""; c2.textContent = CATS[1] ? CATS[1].label : ""; c2.style.display = CATS[1] ? "" : "none";
+  document.querySelector(".c3").textContent = B.ext;
+  applyLang();
+}
+/* ---------- admin: správa kategórií ---------- */
+function catsHtml(){
+  const used = k => adm.mods.some(m => m.game === k);
+  return `<div class="acard"><h3>${tm("cT")}</h3><p>${tm("cP")}</p>
+    <table class="runs">${CATS.map((c,i) => `<tr><td><b>${esc(c.label)}</b><br><small>${esc(c.id)}${c.sm?" · ShareMods":""}</small></td>
+      <td style="text-align:right"><button class="abtn ghost" data-a="cdel" data-i="${i}"${(used(c.id)||CATS.length<2)?' disabled title="'+esc(tm("cUsed"))+'"':""} aria-label="Delete">✕</button></td></tr>`).join("")}</table>
+    <label for="c_name">${tm("cName")}</label><input type="text" id="c_name" maxlength="40" placeholder="🎮 Stardew Valley">
+    <label class="chk"><input type="checkbox" id="c_sm"> ${tm("cSm")}</label>
+    <div class="arow"><button class="abtn" data-a="cadd">${tm("cAdd")}</button></div><div class="astat" id="cstat"></div></div>`;
+}
+async function saveCats(list){
+  try { await putFile(B.cats, b64(JSON.stringify(list, null, 2) + "\n"), "Update categories"); setCats(list); applyBrandUI(); render(filter); drawMods();
+    const s = $id("cstat"); if (s) { s.className = "astat show ok"; s.textContent = tm("cSaved"); } }
+  catch(err){ const s = $id("cstat"); if (s) { s.className = "astat show err"; s.textContent = failMsg(err); } }
+}
+function addCat(){
+  const label = $id("c_name").value.trim(), id = slug(plain(label)); if (!label || !id) return;
+  if (CATS.some(c => c.id === id)) { const s = $id("cstat"); s.className = "astat show err"; s.textContent = tm("cExists"); return; }
+  saveCats(CATS.concat([{id, label, sm:$id("c_sm").checked}]));
+}
+function delCat(i){
+  const c = CATS[i]; if (!c || CATS.length < 2 || adm.mods.some(m => m.game === c.id)) return;
+  if (confirm(`${tm("cDelQ")} „${c.label}“?`)) saveCats(CATS.filter((_,k) => k !== i));
+}
+applyBrandUI();
+loadMods().then(loadVersions).then(()=>{ applyBrandUI(); render(filter); route(); });
 </script>
 </body>
 </html>

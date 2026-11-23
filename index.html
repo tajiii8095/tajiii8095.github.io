@@ -146,6 +146,16 @@ body.admin-open .hero,body.admin-open #mody,body.admin-open .about,body.admin-op
 .grow{display:grid;gap:.4rem;border:1.5px dashed var(--line);border-radius:10px;padding:.7rem;margin-bottom:.6rem}
 .grow .abtn{justify-self:start;padding:.4rem .9rem}
 .hint{font-size:.82rem;color:var(--muted);margin:.3rem 0 0}
+.grow{grid-template-columns:96px minmax(0,1fr) auto;align-items:start;gap:.7rem}
+.gprev{width:96px;height:72px;border-radius:8px;background:var(--soft);overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1.4rem}
+.gprev img{width:100%;height:100%;object-fit:cover;display:block}.gprev img[hidden]{display:none}
+.gform{display:grid;gap:.4rem;min-width:0}
+.gform input[type=file]{font:inherit;font-size:.85rem;max-width:100%}
+.gtag{font-size:.85rem;font-weight:600;color:var(--purple);overflow-wrap:anywhere}
+.gbtn{display:flex;gap:.3rem}.gbtn .abtn{padding:.4rem .7rem}
+.drop{display:block;text-align:center;cursor:pointer;border:2px dashed var(--line);border-radius:12px;padding:1.1rem .8rem;margin:.2rem 0 .8rem;color:var(--muted);font-weight:600}
+.drop:hover,.drop.over{border-color:var(--purple);background:var(--soft);color:var(--purple)}
+@media(max-width:560px){.grow{grid-template-columns:72px minmax(0,1fr)}.gprev{width:72px;height:56px}.gbtn{grid-column:1/-1}}
 .adm{text-decoration:none;opacity:.35;margin-left:.6rem}.adm:hover{opacity:1}
 footer{background:var(--black);color:#8a8a9a;text-align:center;padding:1.5rem 1rem 2rem;font-size:.85rem;border-top:1px solid #26262f}
 </style>
@@ -245,7 +255,7 @@ const TX = {
       cta:"Prezrieť mody",sub:"Vyber hru a stiahni si najnovšiu verziu alebo niektorú zo starších v archíve.",all:"Všetko",
       contactP:"Nápad, chyba alebo otázka k modu? Pripoj sa na Discord server alebo mi napíš priamo.",dcServer:"Discord server",dcNick:"Môj Discord nick",
       foot:"Nezávislé mody. Minecraft a Euro Truck Simulator 2 sú ochranné známky ich vlastníkov.",
-      dl:"Stiahnuť",dlTotal:"Počet stiahnutí všetkých verzií",dlv:"Stiahnuť v",arch:"Archív",archEmpty:"Archív (prázdny)",noOld:"Zatiaľ nie sú staršie verzie.",
+      smTitle:"Stiahnutie cez ShareMods",dl:"Stiahnuť",dlTotal:"Počet stiahnutí všetkých verzií",dlv:"Stiahnuť v",arch:"Archív",archEmpty:"Archív (prázdny)",noOld:"Zatiaľ nie sú staršie verzie.",
       ver:"Verzia",date:"Dátum",na:"Zatiaľ nie je dostupná",none:"Zatiaľ žiadne mody.",load:"Načítavam…",
       back:"← Späť na mody",detail:"Popis a galéria",gallery:"Galéria",descr:"Popis",noReadme:"Popis zatiaľ nie je dostupný.",
       readmeErr:"Popis sa nepodarilo načítať.",notFound:"Tento mod neexistuje.",
@@ -266,7 +276,7 @@ const TX = {
       cta:"Browse mods",sub:"Pick a game and download the latest version or any older one from the archive.",all:"All",
       contactP:"Got an idea, a bug or a question about a mod? Join the Discord server or message me directly.",dcServer:"Discord server",dcNick:"My Discord nick",
       foot:"Independent mods. Minecraft and Euro Truck Simulator 2 are trademarks of their respective owners.",
-      dl:"Download",dlTotal:"Total downloads of all versions",dlv:"Download v",arch:"Archive",archEmpty:"Archive (empty)",noOld:"No older versions yet.",
+      smTitle:"Download via ShareMods",dl:"Download",dlTotal:"Total downloads of all versions",dlv:"Download v",arch:"Archive",archEmpty:"Archive (empty)",noOld:"No older versions yet.",
       ver:"Version",date:"Date",na:"Not available yet",none:"No mods yet.",load:"Loading…",
       back:"← Back to mods",detail:"Description & gallery",gallery:"Gallery",descr:"Description",noReadme:"No description yet.",
       readmeErr:"Could not load the description.",notFound:"This mod does not exist.",
@@ -326,6 +336,7 @@ async function loadVersions(){
     }
   } catch(e){}
   for (const m of MODS){
+    if ((m.sharemods||[]).length) m.versions = m.sharemods.map(x => ({file:"", v:(String(x.v).match(/\d+(?:\.\d+)*/)||[String(x.v)])[0], date:x.date||"", note:"", url:x.url, sm:true}));
     if (!m.versions.length) m.versions = (m.zaloha||[]).map(u=>({file:baseName(u), v:verOf(u), date:"", note:"", url:u}));
     for (const x of m.versions){ x.loader = prefLoader(m, x.file||"") || loaderOf(x.file||"", m); x.mc = gameOf(x.file||"", m); }
     m.versions.sort((a,b)=>cmp(a.v,b.v));
@@ -333,6 +344,14 @@ async function loadVersions(){
   }
 }
 
+const tgt = x => x && x.sm ? ' target="_blank" rel="noopener noreferrer"' : "";
+const smTag = x => x && x.sm ? `<span class="tag">ShareMods</span>` : "";
+function smListHtml(m){
+  const rows = m.versions || [];
+  return `<div class="picker"><h4>${t("smTitle")}</h4>`
+    + rows.map((f,i)=>`<div class="pk-row"><div><b>${esc(f.v)}</b>${i===0?`<span class="tag">${t("pickLatest")}</span>`:""}${f.date?`<small>${esc(f.date)}</small>`:""}</div>
+        <a class="btn" href="${esc(f.url)}"${tgt(f)}>${t("dl")}</a></div>`).join("") + `</div>`;
+}
 const dlTag = m => m.downloads==null ? "" : `<span class="tag" title="${t("dlTotal")}">⬇ ${m.downloads.toLocaleString(lang==="sk"?"sk-SK":"en-US")}</span>`;
 
 function thumbOf(m){ const g=(m.gallery||[])[0], src=m.icon||(g&&g.src);
@@ -349,13 +368,13 @@ function card(m){
     <a class="btn" href="#mod/${esc(m.id)}">${t("dl")}</a>${more}</div>`;
   const archive = old.length
     ? `<details><summary>${t("arch")} (${old.length})</summary><table><tr><th>${t("ver")}</th><th>${t("date")}</th><th></th></tr>`
-      + old.map(o=>`<tr><td>${esc(o.v)}</td><td>${esc(o.date)}</td><td><a href="${esc(o.url)}">${t("dl")}</a></td></tr>`).join("")
+      + old.map(o=>`<tr><td>${esc(o.v)}</td><td>${esc(o.date)}</td><td><a href="${esc(o.url)}"${tgt(o)}>${t("dl")}</a></td></tr>`).join("")
       + `</table></details>`
     : `<details><summary>${t("archEmpty")}</summary><p style="margin-top:.5rem">${t("noOld")}</p></details>`;
   return `<div class="card">${thumbOf(m)}<h3>${esc(m.name)}</h3>
-    <div class="tags"><span class="tag dark">${esc(m.mc)}</span><span class="tag">v${esc(latest.v)}</span>${latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}${dlTag(m)}</div>
+    <div class="tags"><span class="tag dark">${esc(m.mc)}</span><span class="tag">v${esc(latest.v)}</span>${latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}${dlTag(m)}${smTag(latest)}</div>
     <p>${esc(m.desc[lang])}</p>
-    <a class="btn" href="${esc(latest.url)}">${t("dlv")}${esc(latest.v)}</a>${more}${archive}</div>`;
+    <a class="btn" href="${esc(latest.url)}"${tgt(latest)}>${t("dlv")}${esc(latest.v)}</a>${more}${archive}</div>`;
 }
 
 function render(f){
@@ -467,14 +486,14 @@ function renderDetail(m){
   pk = {game:"", loader:""};
   const dl = (m.prefixes||[]).length > 1 ? ""
     : latest
-    ? `<a class="btn" href="${esc(latest.url)}">${t("dlv")}${esc(latest.v)}</a>`
+    ? `<a class="btn" href="${esc(latest.url)}"${tgt(latest)}>${t("dlv")}${esc(latest.v)}</a>`
     : `<span class="btn" style="opacity:.5">${t("na")}</span>`;
   document.getElementById("dbody").innerHTML =
     `<div class="dhead"><div><h1>${esc(m.name)}</h1>
        <div class="tags"><span class="tag dark">${esc(m.mc)}</span>${latest?`<span class="tag">v${esc(latest.v)}</span>`:""}${latest&&latest.date?`<span class="tag">${esc(latest.date)}</span>`:""}${dlTag(m)}</div>
        <p class="sub" style="margin:0">${esc(m.desc[lang])}</p></div>
      <div class="dl-box">${dl}</div></div>`
-    + `<div id="pkbox">${pickerHtml(m)}</div>`
+    + `<div id="pkbox">${(m.sharemods||[]).length ? smListHtml(m) : pickerHtml(m)}</div>`
     + galHtml(m)
     + `<div class="sec-title">${t("descr")}</div><div class="md" id="mdbox"></div>`;
   document.title = "TajiiiMods – " + m.name;
@@ -500,7 +519,7 @@ document.getElementById("detail").addEventListener("click", e => {
 const ADMIN_USER = "tajiii8095";            // len tento GitHub účet sa dostane dnu
 const WORKFLOW   = "discord-release.yml";   // súbor v .github/workflows/
 const TKEY = "gh_admin_token";
-const adm = { token:"", user:"", branch:"main", state:"out", msg:"" };   // state: out | checking | in | denied
+const adm = { token:"", user:"", branch:"main", state:"out", msg:"", prev:{} };   // state: out | checking | in | denied
 try { adm.token = sessionStorage.getItem(TKEY) || localStorage.getItem(TKEY) || ""; } catch(e){}
 
 const ghApi = (path, opt) => fetch("https://api.github.com"+path, Object.assign({}, opt, {
@@ -636,8 +655,26 @@ $id("admin").addEventListener("click", e => {
   else if (a === "mcancel") { adm.edit = null; drawMods(); }
   else if (a === "msave") saveMod();
   else if (a === "mgadd") $id("m_gal").insertAdjacentHTML("beforeend", galRow({}));
-  else if (a === "mgdel") b.closest(".grow").remove();
+  else if (a === "smadd") $id("m_sm").insertAdjacentHTML("beforeend", smRow({}));
+  else if (a === "smdel") b.closest(".smrow").remove();
+  else if (a === "mgdel") { const r = b.closest(".grow"); attachFile(r, null); r.remove(); }
+  else if (a === "mgup") { const r = b.closest(".grow"); if (r.previousElementSibling) r.parentNode.insertBefore(r, r.previousElementSibling); }
+  else if (a === "mgdn") { const r = b.closest(".grow"); if (r.nextElementSibling) r.parentNode.insertBefore(r.nextElementSibling, r); }
+  else if (a === "micdel") { const r = $id("m_iconrow"); attachFile(r, null); r.querySelector(".g-src").value = ""; r.querySelector(".g-file").value = ""; setRowPrev(r, ""); }
   else if (a === "logout") { clearToken(); adm.state = "out"; adm.user = ""; adm.msg = ""; adm.mods = null; adm.edit = null; drawAdmin(); }
+});
+$id("admin").addEventListener("change", e => {
+  const el = e.target;
+  if (el.id === "m_game") { const b = $id("m_smbox"); if (b) b.hidden = el.value !== "ets2"; }
+  else if (el.id === "m_multi") { addFiles([...el.files]); el.value = ""; }
+  else if (el.classList.contains("g-file")) attachFile(el.closest(".grow"), el.files[0] || null);
+  else if (el.classList.contains("g-src")) { const r = el.closest(".grow"); attachFile(r, null); setRowPrev(r, prevSrc(el.value.trim())); }
+});
+$id("admin").addEventListener("dragover", e => { const d = e.target.closest && e.target.closest(".drop"); if (d) { e.preventDefault(); d.classList.add("over"); } });
+$id("admin").addEventListener("dragleave", e => { const d = e.target.closest && e.target.closest(".drop"); if (d) d.classList.remove("over"); });
+$id("admin").addEventListener("drop", e => {
+  const d = e.target.closest && e.target.closest(".drop"); if (!d) return;
+  e.preventDefault(); d.classList.remove("over"); addFiles([...(e.dataTransfer ? e.dataTransfer.files : [])]);
 });
 $id("admin").addEventListener("submit", e => {
   e.preventDefault();
@@ -673,10 +710,17 @@ const TXM = {
       mFail:"Saving failed",mFail403:"The token lacks Contents: Read and write on this repository."}
 };
 const tm = k => TXM[lang][k];
+Object.assign(TXM.sk,{mSm:"Stiahnutie cez ShareMods (ETS2)",mSmH:"Pridaj odkazy na ShareMods pre každú verziu. Najnovšia je na karte, staršie idú do archívu.",mSmV:"Verzia (napr. 1.2)",mSmU:"ShareMods odkaz (https://sharemods.com/…)",mSmD:"Dátum (voliteľné, RRRR-MM-DD)",mSmAdd:"+ Pridať odkaz",mSmBad:"Pri každom ShareMods odkaze vyplň verziu a odkaz začínajúci https://",mGalH:"Obrázky môžeš presunúť do rámika, alebo vybrať z disku (aj viac naraz). Poradie meníš šípkami. Veľké obrázky sa pred nahratím zmenšia na max. 1920 px.",
+  mUrl:"URL obrázka (alebo nahraj súbor nižšie)",mDrop:"📷 Presuň sem obrázky alebo klikni a vyber",mWill:"nahrá sa pri uložení",
+  mIcon:"Ikona na karte modu",mIconH:"Náhľad na úvodnej stránke. Ak ju necháš prázdnu, použije sa prvý obrázok galérie.",mIconUrl:"URL ikony (alebo nahraj súbor)"});
+Object.assign(TXM.en,{mSm:"Download via ShareMods (ETS2)",mSmH:"Add a ShareMods link for each version. The newest is on the card, older ones go to the archive.",mSmV:"Version (e.g. 1.2)",mSmU:"ShareMods link (https://sharemods.com/…)",mSmD:"Date (optional, YYYY-MM-DD)",mSmAdd:"+ Add link",mSmBad:"Each ShareMods link needs a version and a URL starting with https://",mGalH:"Drop images into the box or pick them from your disk (several at once). Reorder with the arrows. Large images are downscaled to 1920 px before uploading.",
+  mUrl:"Image URL (or upload a file below)",mDrop:"📷 Drop images here or click to choose",mWill:"uploads on save",
+  mIcon:"Mod card icon",mIconH:"The thumbnail on the home page. If left empty, the first gallery image is used.",mIconUrl:"Icon URL (or upload a file)"});
+const prevSrc = u => (u && adm.prev && adm.prev[u]) || u || "";
 
 const cleanMod = m => ({id:m.id, game:m.game, name:m.name,
   desc:{sk:(m.desc&&m.desc.sk)||(m.desc&&m.desc.en)||"", en:(m.desc&&m.desc.en)||(m.desc&&m.desc.sk)||""},
-  icon:m.icon||"", prefixes:(m.prefixes||[]).filter(x=>x&&x.p).map(x=>({p:String(x.p).toLowerCase(),loader:x.loader||""})), mc:m.mc||"", prefix:(m.prefix||m.id||"").toLowerCase(), zaloha:m.zaloha||[], readme:m.readme||{},
+  icon:m.icon||"", prefixes:(m.prefixes||[]).filter(x=>x&&x.p).map(x=>({p:String(x.p).toLowerCase(),loader:x.loader||""})), mc:m.mc||"", prefix:(m.prefix||m.id||"").toLowerCase(), zaloha:m.zaloha||[], sharemods:(m.sharemods||[]).filter(x=>x&&x.url).map(x=>({v:String(x.v||""),url:String(x.url),date:x.date||""})), readme:m.readme||{},
   gallery:(m.gallery||[]).filter(g=>g&&g.src).map(g=>({src:g.src, cap:{sk:(g.cap&&g.cap.sk)||"", en:(g.cap&&g.cap.en)||""}}))});
 
 const b64 = s => { let bin=""; new TextEncoder().encode(s).forEach(c => bin += String.fromCharCode(c)); return btoa(bin); };
@@ -708,17 +752,89 @@ async function loadAdminMods(){
   drawMods();
 }
 async function refreshLive(){
-  MODS.splice(0, MODS.length, ...adm.mods.map(cleanMod));
+  MODS.splice(0, MODS.length, ...adm.mods.map(cleanMod).map(m => Object.assign(m, {icon:prevSrc(m.icon), gallery:m.gallery.map(g => Object.assign({}, g, {src:prevSrc(g.src)}))})));
   await loadVersions(); render(filter);
 }
 
 function galRow(g){
+  g = g||{};
   return `<div class="grow">
-    <input type="text" class="g-src" placeholder="${tm("mUrl")}" value="${esc(g.src||"")}">
-    <input type="file" class="g-file" accept="image/*">
-    <input type="text" class="g-csk" placeholder="${tm("mCapSk")}" value="${esc((g.cap&&g.cap.sk)||"")}">
-    <input type="text" class="g-cen" placeholder="${tm("mCapEn")}" value="${esc((g.cap&&g.cap.en)||"")}">
-    <button type="button" class="abtn ghost" data-a="mgdel">✕</button></div>`;
+    <div class="gprev"><img alt=""${g.src?` src="${esc(prevSrc(g.src))}"`:" hidden"}></div>
+    <div class="gform">
+      <input type="text" class="g-src" placeholder="${tm("mUrl")}" value="${esc(g.src||"")}">
+      <span class="gtag" hidden></span>
+      <input type="file" class="g-file" accept="image/*">
+      <input type="text" class="g-csk" placeholder="${tm("mCapSk")}" value="${esc((g.cap&&g.cap.sk)||"")}">
+      <input type="text" class="g-cen" placeholder="${tm("mCapEn")}" value="${esc((g.cap&&g.cap.en)||"")}">
+    </div>
+    <div class="gbtn"><button type="button" class="abtn ghost" data-a="mgup" aria-label="Up">↑</button><button type="button" class="abtn ghost" data-a="mgdn" aria-label="Down">↓</button><button type="button" class="abtn ghost" data-a="mgdel" aria-label="Delete">✕</button></div></div>`;
+}
+function iconRow(src){
+  return `<div class="grow" id="m_iconrow">
+    <div class="gprev"><img alt=""${src?` src="${esc(prevSrc(src))}"`:" hidden"}></div>
+    <div class="gform">
+      <input type="text" class="g-src" placeholder="${tm("mIconUrl")}" value="${esc(src||"")}">
+      <span class="gtag" hidden></span>
+      <input type="file" class="g-file" accept="image/*">
+    </div>
+    <div class="gbtn"><button type="button" class="abtn ghost" data-a="micdel" aria-label="Clear">✕</button></div></div>`;
+}
+function setRowPrev(row, url){
+  const im = row.querySelector(".gprev img"); if (!im) return;
+  if (url) { im.src = url; im.hidden = false; } else { im.removeAttribute("src"); im.hidden = true; }
+}
+function attachFile(row, f){
+  if (row._url) { try { URL.revokeObjectURL(row._url); } catch(e){} row._url = null; }
+  row._file = f || null;
+  const tag = row.querySelector(".gtag"), inp = row.querySelector(".g-src");
+  if (f) {
+    row._url = URL.createObjectURL(f); setRowPrev(row, row._url);
+    tag.textContent = `⬆ ${f.name} – ${tm("mWill")}`; tag.hidden = false; inp.value = "";
+  } else { tag.hidden = true; tag.textContent = ""; }
+}
+function addFiles(files){
+  const box = $id("m_gal"); if (!box) return;
+  for (const f of files) {
+    if (!/^image\//i.test(f.type || "")) continue;
+    box.insertAdjacentHTML("beforeend", galRow({}));
+    attachFile(box.lastElementChild, f);
+  }
+}
+/* veľké obrázky sa zmenšia (max 1920 px), aby repozitár nenarastal a stránka sa rýchlo načítala */
+async function prepImage(file){
+  const extOf = f => ((f.name.match(/\.(png|jpe?g|gif|webp|svg)$/i)||[])[1] || "png").toLowerCase().replace("jpeg","jpg");
+  const keep = {blob:file, ext:extOf(file)};
+  const m = (file.type||"").match(/^image\/(png|jpeg|webp)$/);
+  if (!m || !window.createImageBitmap) return keep;
+  try {
+    const bmp = await createImageBitmap(file);
+    const k = Math.min(1, 1920 / bmp.width);
+    if (k === 1 && file.size <= 1.5*1024*1024) { bmp.close && bmp.close(); return keep; }
+    const c = document.createElement("canvas"); c.width = Math.round(bmp.width*k); c.height = Math.round(bmp.height*k);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height); bmp.close && bmp.close();
+    const blob = await new Promise(r => c.toBlob(r, m[0], .86));
+    if (blob && blob.size < file.size) return {blob, ext: m[1]==="jpeg" ? "jpg" : m[1]};
+  } catch(e){}
+  return keep;
+}
+async function uploadImg(file, id, prefix){
+  mStatus("", `${tm("mSaving")} ${file.name}`);
+  const p = await prepImage(file);
+  const base = (slug(file.name.replace(/\.[^.]+$/,"")) || "img").slice(0,40);
+  const path = `mods/${id}/${prefix||""}${base}-${Math.random().toString(36).slice(2,6)}.${p.ext}`;
+  await putFile(path, await fileB64(p.blob), `Add image ${path}`);
+  try { adm.prev[path] = URL.createObjectURL(p.blob); } catch(e){}   // náhľad hneď, kým GitHub Pages nenasadí nový súbor
+  return path;
+}
+function smRow(x){
+  x = x||{};
+  return `<div class="grow smrow" style="grid-template-columns:minmax(0,1fr) auto">
+    <div class="gform">
+      <input type="text" class="sm-v" placeholder="${tm("mSmV")}" value="${esc(x.v||"")}">
+      <input type="text" class="sm-u" placeholder="${tm("mSmU")}" value="${esc(x.url||"")}">
+      <input type="text" class="sm-d" placeholder="${tm("mSmD")}" value="${esc(x.date||"")}">
+    </div>
+    <div class="gbtn"><button type="button" class="abtn ghost" data-a="smdel" aria-label="Delete">✕</button></div></div>`;
 }
 function formHtml(m, isNew){
   const games = Object.keys(GAMES).map(k => `<option value="${k}"${m.game===k?" selected":""}>${esc(GAMES[k])}</option>`).join("");
@@ -727,11 +843,17 @@ function formHtml(m, isNew){
     <label for="m_id">${tm("mId")}</label><input type="text" id="m_id" value="${esc(m.id)}" ${isNew?"":"readonly"} maxlength="60">${isNew?`<p class="hint">${tm("mIdH")}</p>`:""}
     <label for="m_game">${tm("mGame")}</label><select id="m_game">${games}</select>
     <label for="m_mc">${tm("mMc")}</label><input type="text" id="m_mc" value="${esc(m.mc)}" maxlength="60"><p class="hint">${tm("mMcH")}</p>
+    <div id="m_smbox"${m.game==="ets2"?"":" hidden"}><label>${tm("mSm")}</label><p class="hint" style="margin:0 0 .6rem">${tm("mSmH")}</p>
+      <div id="m_sm">${(m.sharemods||[]).map(smRow).join("")}</div>
+      <button type="button" class="abtn ghost" data-a="smadd">${tm("mSmAdd")}</button></div>
     <label for="m_prefix">${tm("mPrefix")}</label><input type="text" id="m_prefix" value="${esc(m.prefix)}" maxlength="80"><p class="hint">${tm("mPrefixH")}</p>
     <label for="m_dsk">${tm("mDsk")}</label><textarea id="m_dsk" maxlength="400">${esc(m.desc.sk)}</textarea>
     <label for="m_den">${tm("mDen")}</label><textarea id="m_den" maxlength="400">${esc(m.desc.en)}</textarea>
     <label for="m_readme">${tm("mReadme")}</label><textarea id="m_readme" class="tall" spellcheck="false"></textarea><p class="hint">${tm("mReadmeH")}</p>
+    <label>${tm("mIcon")}</label><p class="hint" style="margin:0 0 .6rem">${tm("mIconH")}</p>
+    ${iconRow(m.icon)}
     <label>${tm("mGal")}</label><p class="hint" style="margin:0 0 .6rem">${tm("mGalH")}</p>
+    <label class="drop">${tm("mDrop")}<input type="file" id="m_multi" accept="image/*" multiple hidden></label>
     <div id="m_gal">${m.gallery.map(galRow).join("")}</div>
     <button type="button" class="abtn ghost" data-a="mgadd">${tm("mGalAdd")}</button>
     <div class="arow"><button class="abtn" id="msave" data-a="msave">${tm("mSave")}</button><button class="abtn ghost" data-a="mcancel">${tm("mCancel")}</button></div>
@@ -760,19 +882,24 @@ async function saveMod(){
   const id = e.isNew ? slug(v("m_id") || name) : e.mod.id;
   if (!name || !id || !game || !(dsk || den)) { mStatus("err", tm("mNeed")); return; }
   if (e.isNew && adm.mods.some(x => x.id === id)) { mStatus("err", tm("mDup")); return; }
+  let sharemods = [];
+  if (game === "ets2") {
+    for (const r of document.querySelectorAll("#m_sm .smrow")) {
+      const x = {v:r.querySelector(".sm-v").value.trim(), url:r.querySelector(".sm-u").value.trim(), date:r.querySelector(".sm-d").value.trim()};
+      if (!x.v && !x.url) continue;
+      if (!x.v || !/^https:\/\/\S+$/i.test(x.url)) { mStatus("err", tm("mSmBad")); return; }
+      sharemods.push(x);
+    }
+  }
   const btn = $id("msave"); btn.disabled = true; mStatus("", tm("mSaving"));
   try {
     const mod = {id, game, name, desc:{sk:dsk||den, en:den||dsk}, mc:v("m_mc"), prefix:(v("m_prefix")||id).toLowerCase(),
-                 zaloha:e.mod.zaloha||[], readme:Object.assign({}, e.mod.readme||{}), icon:e.mod.icon||"", prefixes:e.mod.prefixes||[], gallery:[]};
+                 zaloha:e.mod.zaloha||[], sharemods, readme:Object.assign({}, e.mod.readme||{}), icon:"", prefixes:e.mod.prefixes||[], gallery:[]};
+    const irow = $id("m_iconrow");
+    if (irow) mod.icon = irow._file ? await uploadImg(irow._file, id, "icon-") : irow.querySelector(".g-src").value.trim();
     for (const row of document.querySelectorAll("#m_gal .grow")) {
       let src = row.querySelector(".g-src").value.trim();
-      const f = row.querySelector(".g-file").files[0];
-      if (f) {
-        const ext = ((f.name.match(/\.(png|jpe?g|gif|webp|svg)$/i)||[])[1] || "png").toLowerCase();
-        const path = `mods/${id}/${slug(f.name.replace(/\.[^.]+$/,"")) || "img"}.${ext}`;
-        mStatus("", `${tm("mSaving")} ${f.name}`);
-        await putFile(path, await fileB64(f), `Add image ${path}`); src = path;
-      }
+      if (row._file) src = await uploadImg(row._file, id);
       if (!src) continue;
       mod.gallery.push({src, cap:{sk:row.querySelector(".g-csk").value.trim(), en:row.querySelector(".g-cen").value.trim()}});
     }

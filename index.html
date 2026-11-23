@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script>try{var q=new URLSearchParams(location.search).get("brand"),b=q||localStorage.getItem("brand");if(b==="firiii")document.documentElement.classList.add("brand-firiii")}catch(e){}</script>
+<script>try{var q=new URLSearchParams(location.search).get("brand"),b=q||sessionStorage.getItem("brand");if(b==="firiii")document.documentElement.classList.add("brand-firiii")}catch(e){}</script>
 <title>TajiiiMods</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
@@ -207,7 +207,7 @@ const REPO = "tajiii8095/tajiii8095.github.io";   // repozitár, kde sú Release
    Kamarát sa musí pridať do repozitára ako collaborator (Settings > Collaborators), aby mohol ukladať. */
 const BRANDS = {
   tajiii:{name:"TajiiiMods", admin:"tajiii8095",         file:"mods.json", cats:"categories.json", ext:".jar · .scs", workflow:"discord-release.yml",        nick:"tajiii8095",         discord:"https://discord.gg/YTh3HkXet"},
-  firiii:{name:"FiriiiMods", admin:["tajiii8095","DOPLN_GITHUB_MENO"],  file:"mods-firiii.json", cats:"categories-firiii.json", ext:".jar", workflow:"discord-release-firiii.yml", nick:"firicek", discord:"https://discord.gg/YTh3HkXet"}
+  firiii:{name:"FiriiiMods", admin:["tajiii8095","DOPLN_GITHUB_MENO"],  file:"mods-firiii.json", cats:"categories-firiii.json", ext:".jar", workflow:"discord-release-firiii.yml", nick:"DOPLN_DISCORD_NICK", discord:"https://discord.gg/YTh3HkXet"}
 };
 const DEFAULT_CATS = {   // východiskové kategórie; menia sa v admin paneli (ukladajú sa do cats súboru)
   tajiii:[{id:"minecraft",label:"⛏️ Minecraft"},{id:"ets2",label:"🚛 Euro Truck Simulator 2",sm:true}],
@@ -215,7 +215,7 @@ const DEFAULT_CATS = {   // východiskové kategórie; menia sa v admin paneli (
 };
 let BID = null;
 try { const q = new URLSearchParams(location.search).get("brand");   // odkaz ?brand=firiii vyberie značku rovno
-  if (BRANDS[q]) localStorage.setItem("brand", q); BID = localStorage.getItem("brand"); } catch(e){}
+  if (BRANDS[q]) sessionStorage.setItem("brand", q); BID = sessionStorage.getItem("brand"); } catch(e){}
 if (!BRANDS[BID]) BID = null;
 const B = BRANDS[BID || "tajiii"];
 if (!BID) document.body.classList.add("gate-open");
@@ -1004,9 +1004,9 @@ document.title = B.name;
 document.querySelector(".dcbtn").href = B.discord;
 document.querySelector(".dcnick strong").textContent = B.nick;
 document.getElementById("gate").addEventListener("click", e => { const b = e.target.closest("[data-brand]"); if (!b) return;
-  try { localStorage.setItem("brand", b.dataset.brand); } catch(err){} location.href = location.pathname; });
+  try { sessionStorage.setItem("brand", b.dataset.brand); localStorage.removeItem("brand"); } catch(err){} location.reload(); });
 document.getElementById("switchB").addEventListener("click", e => { e.preventDefault();
-  try { localStorage.removeItem("brand"); } catch(err){} location.href = location.pathname; });
+  try { sessionStorage.removeItem("brand"); localStorage.removeItem("brand"); } catch(err){} location.href = location.pathname; });
 document.getElementById("content").innerHTML = `<p>${t("load")}</p>`;
 if (B !== BRANDS.tajiii) MODS.splice(0, MODS.length);   // záložný zoznam patrí len TajiiiMods
 /* mods.json (ak existuje) má prednosť pred zoznamom MODS vyššie, ktorý slúži len ako záloha */

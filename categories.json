@@ -1,0 +1,17 @@
+[
+  {
+    "id": "minecraft",
+    "label": "⛏️ Minecraft",
+    "sm": false
+  },
+  {
+    "id": "ets2",
+    "label": "🚛 Euro Truck Simulator 2",
+    "sm": true
+  },
+  {
+    "id": "software",
+    "label": "Software",
+    "sm": false
+  }
+]

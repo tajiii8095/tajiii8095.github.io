@@ -207,7 +207,7 @@ const REPO = "tajiii8095/tajiii8095.github.io";   // repozitár, kde sú Release
    Kamarát sa musí pridať do repozitára ako collaborator (Settings > Collaborators), aby mohol ukladať. */
 const BRANDS = {
   tajiii:{name:"TajiiiMods", admin:"tajiii8095",         file:"mods.json", cats:"categories.json", ext:".jar · .scs", workflow:"discord-release.yml",        nick:"tajiii8095",         discord:"https://discord.gg/YTh3HkXet"},
-  firiii:{name:"FiriiiMods", admin:["tajiii8095","firec123"],  file:"mods-firiii.json", cats:"categories-firiii.json", ext:".jar", workflow:"discord-release-firiii.yml", nick:"DOPLN_DISCORD_NICK", discord:"https://discord.gg/YTh3HkXet"}
+  firiii:{name:"FiriiiMods", admin:["tajiii8095","DOPLN_GITHUB_MENO"],  file:"mods-firiii.json", cats:"categories-firiii.json", ext:".jar", workflow:"discord-release-firiii.yml", nick:"DOPLN_DISCORD_NICK", discord:"https://discord.gg/YTh3HkXet"}
 };
 const DEFAULT_CATS = {   // východiskové kategórie; menia sa v admin paneli (ukladajú sa do cats súboru)
   tajiii:[{id:"minecraft",label:"⛏️ Minecraft"},{id:"ets2",label:"🚛 Euro Truck Simulator 2",sm:true}],
@@ -257,15 +257,15 @@ const TX = {
       ver:"Verzia",date:"Dátum",na:"Zatiaľ nie je dostupná",none:"Zatiaľ žiadne mody.",load:"Načítavam…",
       back:"← Späť na mody",detail:"Popis a galéria",gallery:"Galéria",descr:"Popis",noReadme:"Popis zatiaľ nie je dostupný.",
       readmeErr:"Popis sa nepodarilo načítať.",notFound:"Tento mod neexistuje.",
-      admTitle:"Admin panel",admLogin:"Prihlásenie",admLoginP:"Prístup má len majiteľ stránky. Prihlás sa GitHub tokenom (Personal access token) s oprávneniami Contents: Read and write a Actions: Read and write pre tento repozitár.",
-      admToken:"GitHub token",admRemember:"Zapamätať v tomto prehliadači",admSignIn:"Prihlásiť",admSignOut:"Odhlásiť",admChecking:"Overujem…",
-      admBadToken:"Token nie je platný.",admNoRepo:"Token nevidí tento repozitár.",admDenied:"Nemáš prístup. Tento panel je len pre majiteľa.",
+      admTitle:"Admin panel",admLogin:"Prihlásenie",admLoginP:"Prístup má len majiteľ stránky. Prihlás sa menom a heslom.",
+      admUser:"Meno",admPass:"Heslo",admBadLogin:"Nesprávne meno alebo heslo.",admNoWorker:"Admin server (Worker) ešte nie je nastavený. Vlož jeho URL do WORKER v index.html.",admNetErr:"Nepodarilo sa spojiť s admin serverom.",admRemember:"Zapamätať v tomto prehliadači",admSignIn:"Prihlásiť",admSignOut:"Odhlásiť",admChecking:"Overujem…",
+      admBadToken:"Relácia vypršala, prihlás sa znova.",admNoRepo:"Token nevidí tento repozitár.",admDenied:"Nemáš prístup. Tento panel je len pre majiteľa.",
       admAs:"Prihlásený ako",admTestT:"Testovací Discord release",admTestP:"Pošle skúšobný oznam do Discordu, presne taký, aký sa posiela pri novom release (s označením TEST).",
       admRelTitle:"Názov releasu",admRelBody:"Popis zmien",admPre:"Označiť ako predbežnú verziu",admSend:"Poslať test na Discord",
       admNeedTitle:"Vyplň názov releasu.",admQueued:"Odoslané na GitHub, čakám na workflow…",admOk:"✅ Test je na Discorde.",admRun:"Workflow beží…",
       admFail:"Nepodarilo sa spustiť workflow",admFail404:"Workflow nenájdený alebo token nemá oprávnenie Actions: Read and write.",admFail422:"Workflow nemá workflow_dispatch alebo vetva neexistuje. Nahraj nový discord-release.yml do repozitára.",
       admRunFail:"❌ Workflow zlyhal",admOpen:"otvoriť",admRuns:"Posledné odoslania",admNoRuns:"Zatiaľ žiadne.",admRefresh:"Obnoviť",
-      admNote:"Stránka je verejná, ale bez tvojho tokenu sa nikto nedostane dnu ani nič neodošle. Webhook je uložený v GitHub Secrets, nikdy na stránke. Token sa ukladá len v tomto prehliadači.",
+      admNote:"Stránka je verejná, ale bez správneho mena a hesla sa nikto nedostane dnu ani nič neodošle. Heslá, GitHub token aj webhook sú uložené mimo stránky.",
       admTokenHow:"Vytvoriť token"},
 
   en:{home:"Home",mods:"Mods",contact:"Contact",
@@ -278,15 +278,15 @@ const TX = {
       ver:"Version",date:"Date",na:"Not available yet",none:"No mods yet.",load:"Loading…",
       back:"← Back to mods",detail:"Description & gallery",gallery:"Gallery",descr:"Description",noReadme:"No description yet.",
       readmeErr:"Could not load the description.",notFound:"This mod does not exist.",
-      admTitle:"Admin panel",admLogin:"Sign in",admLoginP:"Owner access only. Sign in with a GitHub token (Personal access token) that has Contents: Read and write and Actions: Read and write on this repository.",
-      admToken:"GitHub token",admRemember:"Remember in this browser",admSignIn:"Sign in",admSignOut:"Sign out",admChecking:"Checking…",
-      admBadToken:"The token is not valid.",admNoRepo:"The token cannot see this repository.",admDenied:"Access denied. This panel is for the owner only.",
+      admTitle:"Admin panel",admLogin:"Sign in",admLoginP:"Owner access only. Sign in with your username and password.",
+      admUser:"Username",admPass:"Password",admBadLogin:"Wrong username or password.",admNoWorker:"The admin server (Worker) is not set up yet. Put its URL into WORKER in index.html.",admNetErr:"Could not reach the admin server.",admRemember:"Remember in this browser",admSignIn:"Sign in",admSignOut:"Sign out",admChecking:"Checking…",
+      admBadToken:"The session expired, please sign in again.",admNoRepo:"The token cannot see this repository.",admDenied:"Access denied. This panel is for the owner only.",
       admAs:"Signed in as",admTestT:"Test Discord release",admTestP:"Sends a trial announcement to Discord, exactly like the one sent for a new release (marked TEST).",
       admRelTitle:"Release title",admRelBody:"Release notes",admPre:"Mark as pre-release",admSend:"Send test to Discord",
       admNeedTitle:"Enter a release title.",admQueued:"Sent to GitHub, waiting for the workflow…",admOk:"✅ The test is on Discord.",admRun:"Workflow running…",
       admFail:"Could not start the workflow",admFail404:"Workflow not found, or the token lacks Actions: Read and write.",admFail422:"The workflow has no workflow_dispatch or the branch does not exist. Upload the new discord-release.yml to the repository.",
       admRunFail:"❌ Workflow failed",admOpen:"open",admRuns:"Recent sends",admNoRuns:"None yet.",admRefresh:"Refresh",
-      admNote:"The page is public, but nobody gets in or sends anything without your token. The webhook lives in GitHub Secrets, never on the page. The token is stored in this browser only.",
+      admNote:"The page is public, but nobody gets in or sends anything without the right username and password. Passwords, the GitHub token and the webhook are kept off the page.",
       admTokenHow:"Create a token"}
 };
 Object.assign(TX.sk,{pickTitle:"Stiahnuť manuálne",pickGame:"Verzia hry",pickLoader:"Loader",pickNone:"Pre túto kombináciu zatiaľ nie je žiadny súbor.",pickLatest:"Najnovšia"});
@@ -524,16 +524,17 @@ document.getElementById("detail").addEventListener("click", e => {
 });
 
 /* ---------- admin panel ----------
-   Stránka je statická a verejná, takže heslo v HTML by nič nechránilo. Preto sa prihlasuje GitHub tokenom:
-   bez neho sa nedá nič odoslať, a webhook zostáva v GitHub Secrets (nikdy v tomto súbore). Test posiela
-   GitHub Actions workflow discord-release.yml cez workflow_dispatch. */
+   Prihlasovanie je meno + heslo. Heslá ani GitHub token NIE SÚ v tomto súbore: sú v Cloudflare Workeri (worker.js),
+   ktorý heslo overí a až potom za teba volá GitHub API. Panel dostane len dočasnú reláciu (platí 12 hodín).
+   Webhook zostáva v GitHub Secrets. Test posiela GitHub Actions workflow cez workflow_dispatch. */
+const WORKER = "https://prihlasovanie.taii.workers.dev";   // URL tvojho Workera, napr. "https://tajiiimods-admin.TVOJE-MENO.workers.dev" (bez lomky na konci)
 const ADMIN_USERS = [].concat(B.admin).map(x => x.toLowerCase());            // len tento GitHub účet sa dostane dnu
 const WORKFLOW   = B.workflow;   // súbor v .github/workflows/
 const TKEY = "gh_admin_token" + (BID && BID !== "tajiii" ? "_" + BID : "");
 const adm = { token:"", user:"", branch:"main", state:"out", msg:"", prev:{} };   // state: out | checking | in | denied
 try { adm.token = sessionStorage.getItem(TKEY) || localStorage.getItem(TKEY) || ""; } catch(e){}
 
-const ghApi = (path, opt) => fetch("https://api.github.com"+path, Object.assign({}, opt, {
+const ghApi = (path, opt) => fetch(WORKER+"/gh"+path, Object.assign({}, opt, {
   headers: Object.assign({"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28","Authorization":"Bearer "+adm.token}, (opt&&opt.headers)||{})}));
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const $id = id => document.getElementById(id);
@@ -543,23 +544,23 @@ function clearToken(){ adm.token = ""; try { sessionStorage.removeItem(TKEY); lo
 async function verifyAdmin(){
   adm.state = "checking"; adm.msg = ""; drawAdmin();
   try {
-    const u = await ghApi("/user");
-    if (u.status === 401) throw new Error(t("admBadToken"));
-    if (!u.ok) throw new Error("GitHub " + u.status);
-    const me = await u.json();
+    if (!WORKER) throw new Error(t("admNoWorker"));
+    const m = await fetch(WORKER+"/me", {headers:{"Authorization":"Bearer "+adm.token}});
+    if (m.status === 401 || m.status === 403) throw new Error(t("admBadToken"));
+    if (!m.ok) throw new Error("Worker " + m.status);
+    const me = await m.json();
     const r = await ghApi("/repos/" + REPO);
+    if (r.status === 401 || r.status === 403) throw new Error(t("admBadToken"));
     if (!r.ok) throw new Error(t("admNoRepo"));
     const repo = await r.json();
-    adm.user = me.login || "";
-    if (!ADMIN_USERS.includes(adm.user.toLowerCase()) || !(repo.permissions && repo.permissions.push)) {
-      const okUser = ADMIN_USERS.includes(adm.user.toLowerCase());
-      adm.why = okUser ? (lang === "sk" ? `účet ${adm.user} nemá právo zapisovať do repozitára (chýba prijatá pozvánka alebo scope „repo“ na tokene)` : `account ${adm.user} has no write access to the repository (invitation not accepted, or the token lacks the "repo" scope)`)
-                       : (lang === "sk" ? `prihlásený je GitHub účet „${adm.user}“, ale ten nie je v zozname povolených pre túto značku` : `you are signed in as GitHub account "${adm.user}", which is not on this brand's allowed list`);
+    adm.user = me.user || "";
+    if (!(repo.permissions && repo.permissions.push)) {
+      adm.why = lang === "sk" ? "GitHub token vo Workeri nemá právo zapisovať do repozitára (skontroluj Contents: Read and write)" : "the GitHub token in the Worker cannot write to the repository (check Contents: Read and write)";
       adm.state = "denied"; clearToken(); drawAdmin(); return;
     }
     adm.branch = repo.default_branch || "main";
     adm.state = "in";
-  } catch(e){ adm.state = "out"; adm.msg = String((e && e.message) || e); clearToken(); }
+  } catch(e){ adm.state = "out"; adm.msg = (e instanceof TypeError) ? t("admNetErr") : String((e && e.message) || e); clearToken(); }
   drawAdmin();
   if (adm.state === "in") { loadRuns(); loadAdminMods(); }
 }
@@ -588,11 +589,11 @@ function drawAdmin(){
   const err = adm.state === "denied" ? t("admDenied") + " " + (adm.why || "") : adm.msg;
   box.innerHTML =
     `<div class="acard"><h3>${t("admLogin")}</h3><p>${t("admLoginP")}</p>
-       <form data-a="login" autocomplete="off">
-         <label for="admtok">${t("admToken")}</label><input type="password" id="admtok" placeholder="github_pat_…" autocomplete="off" spellcheck="false">
+       <form data-a="login">
+         <label for="admuser">${t("admUser")}</label><input type="text" id="admuser" autocomplete="username" autocapitalize="off" spellcheck="false">
+         <label for="admpass">${t("admPass")}</label><input type="password" id="admpass" autocomplete="current-password" spellcheck="false">
          <label class="chk"><input type="checkbox" id="admrem"> ${t("admRemember")}</label>
-         <div class="arow"><button class="abtn" type="submit">${t("admSignIn")}</button>
-           <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener noreferrer" style="color:var(--purple);font-weight:600">${t("admTokenHow")} ↗</a></div>
+         <div class="arow"><button class="abtn" type="submit">${t("admSignIn")}</button></div>
        </form>
        <div class="astat ${err?"show err":""}" id="admstat">${esc(err||"")}</div></div>
      <p class="anote">${t("admNote")}</p>`;
@@ -694,10 +695,21 @@ $id("admin").addEventListener("drop", e => {
 });
 $id("admin").addEventListener("submit", e => {
   e.preventDefault();
-  const tok = ($id("admtok").value || "").trim(); if (!tok) return;
-  adm.token = tok;
-  try { ($id("admrem").checked ? localStorage : sessionStorage).setItem(TKEY, tok); } catch(err){}
-  verifyAdmin();
+  const user = ($id("admuser").value || "").trim(), pass = $id("admpass").value || ""; if (!user || !pass) return;
+  const remember = $id("admrem").checked;
+  adm.state = "checking"; adm.msg = ""; drawAdmin();
+  (async () => {
+    try {
+      if (!WORKER) throw new Error(t("admNoWorker"));
+      const r = await fetch(WORKER+"/login", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({user, pass, brand:BID || "tajiii"})});
+      if (r.status === 401 || r.status === 403) throw new Error(t("admBadLogin"));
+      if (!r.ok) throw new Error("Worker " + r.status);
+      const d = await r.json();
+      adm.token = d.session;
+      try { (remember ? localStorage : sessionStorage).setItem(TKEY, d.session); } catch(err){}
+    } catch(err){ adm.state = "out"; adm.msg = (err instanceof TypeError) ? t("admNetErr") : String((err && err.message) || err); drawAdmin(); return; }
+    verifyAdmin();
+  })();
 });
 
 /* ---------- admin: správa modov ----------

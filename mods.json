@@ -81,6 +81,14 @@
     },
     "icon": "",
     "prefixes": [],
-    "gallery": []
+    "gallery": [
+      {
+        "src": "mods/krone-mega-kdlc/profile-adaptation-162-16x9.png",
+        "cap": {
+          "sk": "",
+          "en": ""
+        }
+      }
+    ]
   }
 ]

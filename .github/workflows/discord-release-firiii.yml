@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Poslať správu na Discord
         env:
-          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_FIRIII }}
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
           TEST: ${{ github.event_name == 'workflow_dispatch' }}
           TITLE: ${{ github.event.release.name || github.event.release.tag_name || inputs.title }}
           BODY: ${{ github.event.release.body || inputs.body }}

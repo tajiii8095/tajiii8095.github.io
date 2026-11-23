@@ -27,10 +27,10 @@ jobs:
           import json, os, re, subprocess, urllib.request, datetime
 
           SITE = os.environ["SITE"].rstrip("/")
-          # file, brand id, brand name, webhook env var
+          # file, brand id, brand name, webhook env var, embed colour
           BRANDS = [
-              ("mods.json",        "tajiii", "TajiiiMods", "WEBHOOK_TAJIII"),
-              ("mods-firiii.json", "firiii", "FiriiiMods", "WEBHOOK_FIRIII"),
+              ("mods.json",        "tajiii", "TajiiiMods", "WEBHOOK_TAJIII", 8141549),
+              ("mods-firiii.json", "firiii", "FiriiiMods", "WEBHOOK_FIRIII", 15022139),
           ]
 
           def load(rev, path):
@@ -44,7 +44,7 @@ jobs:
               return [int(x) for x in re.findall(r"\d+", str(v))] or [0]
 
           now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-          for path, bid, bname, hook in BRANDS:
+          for path, bid, bname, hook, colour in BRANDS:
               old = {m["id"]: {x.get("url") for x in m.get("sharemods", [])} for m in load("HEAD~1", path)}
               posts = []
               for m in load("HEAD", path):
@@ -70,7 +70,7 @@ jobs:
                       "title": f"{m['name']} v{v}",
                       "url": page,
                       "description": desc or "_No release notes._",
-                      "color": 8141549,
+                      "color": colour,
                       "fields": [{"name": "📦 Download", "value": f"**[ShareMods]({x['url']})**  ·  [Mod page]({page})", "inline": False}],
                       "footer": {"text": f"Released by {os.environ['AUTHOR']}", "icon_url": os.environ["AVATAR"]},
                       "timestamp": now,

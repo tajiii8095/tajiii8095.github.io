@@ -56,7 +56,7 @@ jobs:
                 title: $title,
                 url: $site,
                 description: (if ($body | length) > 0 then $body else "_Bez popisu zmien._" end),
-                color: (if $test == "true" then 9807270 elif $pre == "true" then 16096779 else 8141549 end),
+                color: (if $test == "true" then 9807270 elif $pre == "true" then 16096779 else 15022139 end),
                 fields: [{name: "📦 Stiahnutie", value: ("**[" + ($site | sub("^https?://"; "") | rtrimstr("/")) + "](" + $site + ")**"), inline: false}],
                 footer: ({text: ((if $test == "true" then "Testovací oznam  ·  " else "" end) + "Vydal " + $author + (if $pre == "true" then "  ·  predbežná verzia" else "" end))}
                          + (if ($avatar | length) > 0 then {icon_url: $avatar} else {} end)),

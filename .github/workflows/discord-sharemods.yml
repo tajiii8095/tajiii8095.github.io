@@ -1,7 +1,6 @@
-name: Discord - nová verzia na ShareMods
+name: Discord announcement for new ShareMods version
 
-# Spustí sa vždy, keď sa v repozitári zmení mods.json
-# (admin panel ho ukladá po každom pridaní/úprave modu).
+# Runs whenever mods.json changes (the admin panel saves it after every mod add/edit).
 on:
   push:
     paths:
@@ -15,14 +14,17 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: Nájsť nové ShareMods verzie a poslať na Discord
+      - name: Find new ShareMods versions and post to Discord
         env:
-          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}   # same secret as discord-release.yml
+          AUTHOR: ${{ github.actor }}
+          AVATAR: https://github.com/${{ github.actor }}.png
+          SITE: https://tajiii8095.github.io
         run: |
           python3 - <<'PY'
-          import json, os, subprocess, urllib.request
+          import json, os, re, subprocess, urllib.request, datetime
 
-          SITE = "https://tajiii8095.github.io"
+          SITE = os.environ["SITE"].rstrip("/")
 
           def load(rev):
               try:
@@ -32,45 +34,42 @@ jobs:
                   return []
 
           def vkey(v):
-              import re
               return [int(x) for x in re.findall(r"\d+", str(v))] or [0]
 
           old = {m["id"]: {x.get("url") for x in m.get("sharemods", [])} for m in load("HEAD~1")}
-          new = load("HEAD")
-
           posts = []
-          for m in new:
+          for m in load("HEAD"):
               known = old.get(m["id"], set())
               added = [x for x in m.get("sharemods", []) if x.get("url") and x["url"] not in known]
-              if not added:
-                  continue
-              # ak pribudlo viac verzií naraz (napr. nový mod), pošle sa len najnovšia
-              latest = max(added, key=lambda x: vkey(x.get("v")))
-              posts.append((m, latest))
+              if added:
+                  # several versions added at once (e.g. a new mod): post only the newest
+                  posts.append((m, max(added, key=lambda x: vkey(x.get("v")))))
 
           if not posts:
-              print("Žiadna nová ShareMods verzia.")
+              print("No new ShareMods version.")
               raise SystemExit(0)
 
+          now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
           for m, x in posts:
-              desc = (m.get("desc") or {}).get("sk") or (m.get("desc") or {}).get("en") or ""
+              d = m.get("desc") or {}
+              desc = (d.get("en") or d.get("sk") or "")[:1500]
               v = str(x["v"]).lstrip("vV")
+              page = f"{SITE}/#mod/{m['id']}"
               embed = {
-                  "title": f"🚛 {m['name']} v{v}",
-                  "url": x["url"],
-                  "description": f"**Nová verzia modu je vonku!**\n\n[⬇️ Stiahnuť na ShareMods]({x['url']})\n[🌐 Stránka modu]({SITE}/#mod/{m['id']})",
+                  "author": {"name": "🆕 New release"},
+                  "title": f"{m['name']} v{v}",
+                  "url": page,
+                  "description": desc or "_No release notes._",
                   "color": 8141549,
-                  "footer": {"text": "TajiiiMods"},
+                  "fields": [{"name": "📦 Download", "value": f"**[ShareMods]({x['url']})**  ·  [Mod page]({page})", "inline": False}],
+                  "footer": {"text": f"Released by {os.environ['AUTHOR']}", "icon_url": os.environ["AVATAR"]},
+                  "timestamp": now,
               }
-              if x.get("date"):
-                  embed["timestamp"] = None
-                  embed["footer"]["text"] += f" • {x['date']}"
-              embed = {k: val for k, val in embed.items() if val is not None}
               req = urllib.request.Request(
-                  os.environ["DISCORD_WEBHOOK"],
+                  os.environ["WEBHOOK"],
                   data=json.dumps({"embeds": [embed]}).encode("utf-8"),
                   headers={"Content-Type": "application/json", "User-Agent": "tajiiimods-notify"},
               )
               urllib.request.urlopen(req)
-              print("Odoslané:", m["name"], v)
+              print("Sent:", m["name"], v)
           PY

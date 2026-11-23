@@ -114,14 +114,33 @@ body.admin-open .hero,body.admin-open #mody,body.admin-open .about,body.admin-op
 /* mobil */
 @media(max-width:860px){.hin{grid-template-columns:1fr}.hviz{height:200px;order:-1}.card{grid-template-columns:auto auto 1fr}.card::before,.card>.thumb{grid-column:1/-1;grid-row:auto;margin:0 0 .9rem;aspect-ratio:16/9;min-height:0}.card::before{min-height:0}.card>*:not(.thumb){grid-column:1/-1}.card>.btn{grid-column:1}.card>.btn.ghost{grid-column:2}#dbody{grid-template-columns:1fr}#dbody>#pkbox{grid-column:1;grid-row:auto;position:static;margin-bottom:1rem}}
 @media(max-width:560px){nav a{padding:.4rem .55rem;font-size:.85rem}.logo{font-size:1.05rem}.bar{padding-left:1rem}.grow{grid-template-columns:72px minmax(0,1fr)}.gprev{width:72px;height:56px}.gbtn{grid-column:1/-1}.about .in{padding:1.6rem}}
+/* výber značky */
+#gate{display:none;max-width:900px;margin:0 auto;padding:4rem 1.2rem 5rem;text-align:center}
+body.gate-open #gate{display:block}
+body.gate-open .hero,body.gate-open #mody,body.gate-open .about,body.gate-open #detail,body.gate-open #admin{display:none!important}
+body.gate-open nav a,body.gate-open footer .adm{display:none}
+#gate h1{margin:0 0 .6rem;font:700 clamp(2rem,5vw,3.2rem) var(--hf);letter-spacing:-.04em}
+.gcards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem;margin-top:2rem}
+.gcard{display:flex;flex-direction:column;align-items:flex-start;gap:2.2rem;text-align:left;cursor:pointer;color:var(--ink);padding:1.8rem;border:1px solid var(--line);border-radius:28px;background:radial-gradient(420px 200px at 100% 0%,rgba(139,92,246,.3),transparent 70%),var(--s1);transition:.25s;font:inherit}
+.gcard b{font:700 2rem var(--hf);letter-spacing:-.04em}.gcard b span{color:var(--purple2)}
+.gcard i{font-style:normal;font-weight:600;color:var(--purple2)}
+.gcard:hover{border-color:var(--purple);transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.5),var(--glow)}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
 <header><div class="bar">
   <a class="logo" href="#top">Tajiii<span>Mods</span></a>
-  <nav><a href="#top" data-i="home">Domov</a><a href="#mody" data-i="mods">Mody</a><a href="#kontakt" data-i="contact">Kontakt</a><span class="lang"><button data-l="sk">SK</button><button data-l="en">EN</button></span></nav>
+  <nav><a href="#top" data-i="home">Domov</a><a href="#mody" data-i="mods">Mody</a><a href="#kontakt" data-i="contact">Kontakt</a><a href="#" id="switchB" data-i="switchB"></a><span class="lang"><button data-l="sk">SK</button><button data-l="en">EN</button></span></nav>
 </div></header>
+
+<div id="gate"><div class="gin">
+  <h1 data-i="gateT"></h1><p class="sub" data-i="gateP"></p>
+  <div class="gcards">
+    <button class="gcard" data-brand="tajiii"><b>Tajiii<span>Mods</span></b><i><span data-i="gateGo"></span> →</i></button>
+    <button class="gcard" data-brand="firiii"><b>Firiii<span>Mods</span></b><i><span data-i="gateGo"></span> →</i></button>
+  </div>
+</div></div>
 
 <div class="hero" id="top"><div class="hin">
   <div class="htxt">
@@ -183,6 +202,19 @@ body.admin-open .hero,body.admin-open #mody,body.admin-open .about,body.admin-op
    Mody sa spravuju v admin paneli (ukladaju sa do mods.json). Zoznam nizsie je len zaloha, kym mods.json neexistuje.
    ============================================================ */
 const REPO = "tajiii8095/tajiii8095.github.io";   // repozitár, kde sú Releases
+
+/* ZNAČKY: každá má vlastný zoznam modov (file), vlastný admin (GitHub účet) a vlastný Discord workflow.
+   Kamarát sa musí pridať do repozitára ako collaborator (Settings > Collaborators), aby mohol ukladať. */
+const BRANDS = {
+  tajiii:{name:"TajiiiMods", admin:"tajiii8095",         file:"mods.json",        workflow:"discord-release.yml",        nick:"tajiii8095",         discord:"https://discord.gg/YTh3HkXet"},
+  firiii:{name:"FiriiiMods", admin:"DOPLN_GITHUB_MENO",  file:"mods-firiii.json", workflow:"discord-release-firiii.yml", nick:"DOPLN_DISCORD_NICK", discord:"https://discord.gg/YTh3HkXet"}
+};
+let BID = null;
+try { const q = new URLSearchParams(location.search).get("brand");   // odkaz ?brand=firiii vyberie značku rovno
+  if (BRANDS[q]) localStorage.setItem("brand", q); BID = localStorage.getItem("brand"); } catch(e){}
+if (!BRANDS[BID]) BID = null;
+const B = BRANDS[BID || "tajiii"];
+if (!BID) document.body.classList.add("gate-open");
 
 const MODS = [
   {id:"tv-radio", game:"minecraft", name:"TV Radio",
@@ -254,6 +286,8 @@ const TX = {
 };
 Object.assign(TX.sk,{pickTitle:"Stiahnuť manuálne",pickGame:"Verzia hry",pickLoader:"Loader",pickNone:"Pre túto kombináciu zatiaľ nie je žiadny súbor.",pickLatest:"Najnovšia"});
 Object.assign(TX.en,{pickTitle:"Download manually",pickGame:"Game version",pickLoader:"Loader",pickNone:"No file for this combination yet.",pickLatest:"Latest"});
+Object.assign(TX.sk,{gateT:"Vyber si značku",gateP:"Dvaja tvorcovia, dve oddelené stránky s modmi. Vyber, ktorú chceš otvoriť.",gateGo:"Otvoriť",switchB:"Zmeniť značku"});
+Object.assign(TX.en,{gateT:"Choose a brand",gateP:"Two creators, two separate mod pages. Pick the one you want to open.",gateGo:"Open",switchB:"Switch brand"});
 let lang = "sk";
 try { const saved = localStorage.getItem("lang");
   if (saved === "sk" || saved === "en") lang = saved;
@@ -457,7 +491,7 @@ function renderDetail(m){
     + `<div id="pkbox">${(m.sharemods||[]).length ? smListHtml(m) : pickerHtml(m)}</div>`
     + galHtml(m)
     + `<div class="sec-title">${t("descr")}</div><div class="md" id="mdbox"></div>`;
-  document.title = "TajiiiMods – " + m.name;
+  document.title = B.name + " – " + m.name;
   loadReadme(m);
 }
 document.getElementById("detail").addEventListener("change", e => {
@@ -477,9 +511,9 @@ document.getElementById("detail").addEventListener("click", e => {
    Stránka je statická a verejná, takže heslo v HTML by nič nechránilo. Preto sa prihlasuje GitHub tokenom:
    bez neho sa nedá nič odoslať, a webhook zostáva v GitHub Secrets (nikdy v tomto súbore). Test posiela
    GitHub Actions workflow discord-release.yml cez workflow_dispatch. */
-const ADMIN_USER = "tajiii8095";            // len tento GitHub účet sa dostane dnu
-const WORKFLOW   = "discord-release.yml";   // súbor v .github/workflows/
-const TKEY = "gh_admin_token";
+const ADMIN_USER = B.admin;            // len tento GitHub účet sa dostane dnu
+const WORKFLOW   = B.workflow;   // súbor v .github/workflows/
+const TKEY = "gh_admin_token" + (BID && BID !== "tajiii" ? "_" + BID : "");
 const adm = { token:"", user:"", branch:"main", state:"out", msg:"", prev:{} };   // state: out | checking | in | denied
 try { adm.token = sessionStorage.getItem(TKEY) || localStorage.getItem(TKEY) || ""; } catch(e){}
 
@@ -707,7 +741,7 @@ function mStatus(kind, text){ const el = $id("mstat"); if (!el) return; el.class
 
 async function loadAdminMods(){
   adm.mods = null; adm.edit = null;
-  try { const f = await getFile("mods.json"); if (f && f.content) adm.mods = JSON.parse(unb64(f.content)).map(cleanMod); } catch(e){}
+  try { const f = await getFile(B.file); if (f && f.content) adm.mods = JSON.parse(unb64(f.content)).map(cleanMod); } catch(e){}
   if (!adm.mods) adm.mods = MODS.map(cleanMod);   // mods.json ešte neexistuje: začni od modov zo stránky
   applyMerge(adm.mods);
   drawMods();
@@ -871,7 +905,7 @@ async function saveMod(){
       await putFile(path, b64(md), `Update ${path}`); mod.readme[key] = path;
     }
     const list = adm.mods.slice(); if (e.isNew) list.push(mod); else list[e.index] = mod;
-    await putFile("mods.json", b64(JSON.stringify(list, null, 2) + "\n"), `${e.isNew?"Add":"Update"} mod ${name}`);
+    await putFile(B.file, b64(JSON.stringify(list, null, 2) + "\n"), `${e.isNew?"Add":"Update"} mod ${name}`);
     adm.mods = list; adm.edit = null; drawMods(); mStatus("ok", tm("mSaved"));
     refreshLive();
   } catch(err){ mStatus("err", failMsg(err)); const b = $id("msave"); if (b) b.disabled = false; }
@@ -880,7 +914,7 @@ async function delMod(i){
   const m = adm.mods[i]; if (!m || !confirm(`${tm("mDelQ")} „${m.name}“?`)) return;
   try {
     const list = adm.mods.filter((_,k) => k !== i);
-    await putFile("mods.json", b64(JSON.stringify(list, null, 2) + "\n"), `Remove mod ${m.name}`);
+    await putFile(B.file, b64(JSON.stringify(list, null, 2) + "\n"), `Remove mod ${m.name}`);
     adm.mods = list; drawMods(); mStatus("ok", tm("mSaved")); refreshLive();
   } catch(err){ mStatus("err", failMsg(err)); }
 }
@@ -891,7 +925,7 @@ function route(){
   if (h === "#admin") {
     curMod = null;
     document.body.classList.remove("detail-open"); document.body.classList.add("admin-open");
-    document.title = "TajiiiMods – Admin";
+    document.title = B.name + " – Admin";
     drawAdmin(); window.scrollTo(0,0);
     if (adm.token && adm.state === "out") verifyAdmin();
     return;
@@ -910,7 +944,7 @@ function route(){
     document.body.classList.add("detail-open"); return;
   }
   const was = document.body.classList.contains("detail-open");
-  document.body.classList.remove("detail-open"); curMod = null; document.title = "TajiiiMods";
+  document.body.classList.remove("detail-open"); curMod = null; document.title = B.name;
   if ((was || wasAdmin) && h.length > 1) { const el = document.getElementById(h.slice(1)); if (el) el.scrollIntoView(); }
 }
 window.addEventListener("hashchange", route);
@@ -929,7 +963,16 @@ document.querySelector(".lang").addEventListener("click", e => {
   if (document.body.classList.contains("admin-open")) drawAdmin();
 });
 applyLang();
+document.querySelector(".logo").innerHTML = esc(B.name).replace(/Mods$/, "<span>Mods</span>");
+document.title = B.name;
+document.querySelector(".dcbtn").href = B.discord;
+document.querySelector(".dcnick strong").textContent = B.nick;
+document.getElementById("gate").addEventListener("click", e => { const b = e.target.closest("[data-brand]"); if (!b) return;
+  try { localStorage.setItem("brand", b.dataset.brand); } catch(err){} location.href = location.pathname; });
+document.getElementById("switchB").addEventListener("click", e => { e.preventDefault();
+  try { localStorage.removeItem("brand"); } catch(err){} location.href = location.pathname; });
 document.getElementById("content").innerHTML = `<p>${t("load")}</p>`;
+if (B !== BRANDS.tajiii) MODS.splice(0, MODS.length);   // záložný zoznam patrí len TajiiiMods
 /* mods.json (ak existuje) má prednosť pred zoznamom MODS vyššie, ktorý slúži len ako záloha */
 const MERGED_BUILTIN = JSON.parse(JSON.stringify(MODS.find(m=>m.id==="tv-radio")||null));
 const isTvRadio = m => /tv-?radio/i.test(m.id+" "+m.name);
@@ -955,7 +998,7 @@ function applyMerge(list){
 }
 async function loadMods(){
   try {
-    const r = await fetch("mods.json", {cache:"no-cache"});
+    const r = await fetch(B.file, {cache:"no-cache"});
     if (r.ok) { const d = await r.json(); if (Array.isArray(d)) MODS.splice(0, MODS.length, ...d.filter(m=>m&&m.id&&m.name&&m.game).map(cleanMod)); }
   } catch(e){}
   applyMerge(MODS);

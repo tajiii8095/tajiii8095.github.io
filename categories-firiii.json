@@ -3,5 +3,10 @@
     "id": "minecraft",
     "label": "⛏️ Minecraft",
     "sm": false
+  },
+  {
+    "id": "hearts-of-iron-iv",
+    "label": "Hearts of iron IV",
+    "sm": true
   }
 ]

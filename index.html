@@ -113,7 +113,7 @@ body.admin-open .hero,body.admin-open #mody,body.admin-open .about,body.admin-op
 .grow{display:grid;grid-template-columns:96px minmax(0,1fr) auto;align-items:start;gap:.7rem;border:1px dashed var(--line);border-radius:12px;padding:.7rem;margin-bottom:.6rem}.grow .abtn{justify-self:start;padding:.4rem .9rem}
 .gprev{width:96px;height:72px;border-radius:10px;background:var(--s2);overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1.4rem}.gprev img{width:100%;height:100%;object-fit:cover;display:block}.gprev img[hidden]{display:none}
 .gform{display:grid;gap:.4rem;min-width:0}.gform input[type=file]{font:inherit;font-size:.85rem;max-width:100%;color:var(--muted)}.gtag{font-size:.85rem;font-weight:600;color:var(--purple2);overflow-wrap:anywhere}.gbtn{display:flex;gap:.3rem}.gbtn .abtn{padding:.4rem .7rem}
-.drop{display:block;text-align:center;cursor:pointer;border:2px dashed var(--line);border-radius:14px;padding:1.1rem .8rem;margin:.2rem 0 .8rem;color:var(--muted);font-weight:600}.drop:hover,.drop.over{border-color:var(--purple);background:var(--s2);color:var(--purple2)}
+.drop,.mdrop{display:block;text-align:center;cursor:pointer;border:2px dashed var(--line);border-radius:14px;padding:1.1rem .8rem;margin:.2rem 0 .8rem;color:var(--muted);font-weight:600}.drop:hover,.drop.over,.mdrop:hover,.mdrop.over{border-color:var(--purple);background:var(--s2);color:var(--purple2)}
 /* mobil */
 @media(max-width:860px){.hin{grid-template-columns:1fr}.hviz{height:200px;order:-1}.card{grid-template-columns:auto auto 1fr}.card::before,.card>.thumb{grid-column:1/-1;grid-row:auto;margin:0 0 .9rem;aspect-ratio:16/9;min-height:0}.card::before{min-height:0}.card>*:not(.thumb){grid-column:1/-1}.card>.btn{grid-column:1}.card>.btn.ghost{grid-column:2}#dbody{grid-template-columns:1fr}#dbody>#pkbox{grid-column:1;grid-row:auto;position:static;margin-bottom:1rem}}
 @media(max-width:560px){nav a{padding:.4rem .55rem;font-size:.85rem}.logo{font-size:1.05rem}.bar{padding-left:1rem}.grow{grid-template-columns:72px minmax(0,1fr)}.gprev{width:72px;height:56px}.gbtn{grid-column:1/-1}.about .in{padding:1.6rem}}
@@ -684,6 +684,7 @@ $id("admin").addEventListener("change", e => {
   const el = e.target;
   if (el.id === "m_game") { const b = $id("m_smbox"); if (b) b.hidden = !CATSM.has(el.value); }
   else if (el.id === "m_multi") { addFiles([...el.files]); el.value = ""; }
+  else if (el.id === "m_mdfile") { loadMdFile(el.files[0]); el.value = ""; }
   else if (el.classList.contains("g-file")) attachFile(el.closest(".grow"), el.files[0] || null);
   else if (el.classList.contains("g-src")) { const r = el.closest(".grow"); attachFile(r, null); setRowPrev(r, prevSrc(el.value.trim())); }
 });
@@ -692,6 +693,15 @@ $id("admin").addEventListener("dragleave", e => { const d = e.target.closest && 
 $id("admin").addEventListener("drop", e => {
   const d = e.target.closest && e.target.closest(".drop"); if (!d) return;
   e.preventDefault(); d.classList.remove("over"); addFiles([...(e.dataTransfer ? e.dataTransfer.files : [])]);
+});
+/* .md súbor sa dá pustiť na zónu aj priamo na pole popisu */
+const hasFiles = e => !!(e.dataTransfer && [...(e.dataTransfer.types || [])].includes("Files"));
+$id("admin").addEventListener("dragover", e => { const d = e.target.closest && e.target.closest(".mdrop, #m_readme"); if (d && hasFiles(e)) { e.preventDefault(); if (d.classList) d.classList.add("over"); } });
+$id("admin").addEventListener("dragleave", e => { const d = e.target.closest && e.target.closest(".mdrop"); if (d) d.classList.remove("over"); });
+$id("admin").addEventListener("drop", e => {
+  const d = e.target.closest && e.target.closest(".mdrop, #m_readme"); if (!d || !hasFiles(e)) return;
+  e.preventDefault(); if (d.classList) d.classList.remove("over");
+  const f = e.dataTransfer.files[0]; if (f) loadMdFile(f);
 });
 $id("admin").addEventListener("submit", e => {
   e.preventDefault();
@@ -721,7 +731,7 @@ const TXM = {
       mHowDl:"Samotný súbor modu (.jar) nahraj ako nový Release na GitHub. Stránka si ho nájde sama podľa začiatku názvu súboru.",
       mFormNew:"Nový mod",mFormEdit:"Upraviť mod",mName:"Názov modu",mId:"ID (adresa #mod/…)",mIdH:"Nechaj prázdne, vyplní sa z názvu. Neskôr sa už nemení.",mGame:"Hra",
       mMc:"Verzia hry / loader",mMcH:"Napr. Fabric 26.2 alebo ETS2 1.62",mPrefix:"Začiatok názvu súboru v Releases",mPrefixH:"Napr. tv-radio-mod pre súbor tv-radio-mod-6.3.0.jar. Nechaj prázdne = ID.",
-      mDsk:"Krátky popis (SK)",mDen:"Krátky popis (EN)",mReadme:"Dlhý popis (Markdown)",mReadmeH:"Zobrazí sa v detaile modu. Ak necháš prázdne, existujúci popis sa nezmení.",
+      mDsk:"Krátky popis (SK)",mDen:"Krátky popis (EN)",mReadme:"Dlhý popis (Markdown)",mReadmeH:"Zobrazí sa v detaile modu. Napíš ho sem alebo nahraj súbor .md. Ak necháš prázdne, existujúci popis sa nezmení.",
       mGal:"Galéria",mGalH:"Prvý obrázok je náhľad na karte. Zadaj URL, alebo nahraj súbor (uloží sa do repozitára).",mGalAdd:"+ Pridať obrázok",
       mUrl:"URL obrázka (alebo nahraj súbor nižšie)",mCapSk:"Popisok SK",mCapEn:"Popisok EN",mSave:"Uložiť",mCancel:"Zrušiť",mSaving:"Ukladám…",
       mSaved:"✅ Uložené. Stránka sa aktualizuje približne do minúty.",mNeed:"Vyplň názov, hru a aspoň krátky popis.",mDup:"Mod s týmto ID už existuje.",
@@ -731,7 +741,7 @@ const TXM = {
       mHowDl:"Upload the mod file (.jar) as a new GitHub Release. The site finds it by the start of the file name.",
       mFormNew:"New mod",mFormEdit:"Edit mod",mName:"Mod name",mId:"ID (address #mod/…)",mIdH:"Leave empty to derive it from the name. It cannot be changed later.",mGame:"Game",
       mMc:"Game version / loader",mMcH:"E.g. Fabric 26.2 or ETS2 1.62",mPrefix:"File name prefix in Releases",mPrefixH:"E.g. tv-radio-mod for tv-radio-mod-6.3.0.jar. Empty = the ID.",
-      mDsk:"Short description (SK)",mDen:"Short description (EN)",mReadme:"Long description (Markdown)",mReadmeH:"Shown on the mod's detail page. If left empty, the existing description is not changed.",
+      mDsk:"Short description (SK)",mDen:"Short description (EN)",mReadme:"Long description (Markdown)",mReadmeH:"Shown on the mod's detail page. Type it here or upload an .md file. If left empty, the existing description is not changed.",
       mGal:"Gallery",mGalH:"The first image is the card thumbnail. Enter a URL or upload a file (it is stored in the repository).",mGalAdd:"+ Add image",
       mUrl:"Image URL (or upload a file below)",mCapSk:"Caption SK",mCapEn:"Caption EN",mSave:"Save",mCancel:"Cancel",mSaving:"Saving…",
       mSaved:"✅ Saved. The site updates within about a minute.",mNeed:"Fill in the name, the game and at least a short description.",mDup:"A mod with this ID already exists.",
@@ -746,6 +756,8 @@ Object.assign(TXM.sk,{mSm:"Stiahnutie cez ShareMods (ETS2)",mSmH:"Pridaj odkazy 
 Object.assign(TXM.en,{mSm:"Download via ShareMods (ETS2)",mSmH:"Add a ShareMods link for each version. The newest is on the card, older ones go to the archive.",mSmV:"Version (e.g. 1.2)",mSmU:"ShareMods link (https://sharemods.com/…)",mSmD:"Date (optional, YYYY-MM-DD)",mSmAdd:"+ Add link",mSmBad:"Each ShareMods link needs a version and a URL starting with https://",mGalH:"Drop images into the box or pick them from your disk (several at once). Reorder with the arrows. Large images are downscaled to 1920 px before uploading.",
   mUrl:"Image URL (or upload a file below)",mDrop:"📷 Drop images here or click to choose",mWill:"uploads on save",
   mIcon:"Mod card icon",mIconH:"The thumbnail on the home page. If left empty, the first gallery image is used.",mIconUrl:"Icon URL (or upload a file)"});
+Object.assign(TXM.sk,{mMdDrop:"📄 Presuň sem súbor .md s popisom alebo klikni a vyber",mMdLoaded:"načítané do poľa, uloží sa po kliknutí na Uložiť",mMdBad:"Vyber súbor .md (Markdown) alebo .txt.",mMdBig:"Súbor je príliš veľký (max 1 MB).",mMdOver:"Prepísať text v poli dlhého popisu obsahom súboru?"});
+Object.assign(TXM.en,{mMdDrop:"📄 Drop an .md description file here or click to choose",mMdLoaded:"loaded into the field, saved when you press Save",mMdBad:"Choose an .md (Markdown) or .txt file.",mMdBig:"The file is too large (max 1 MB).",mMdOver:"Replace the text in the long description field with the file contents?"});
 const prevSrc = u => (u && adm.prev && adm.prev[u]) || u || "";
 
 const cleanMod = m => ({id:m.id, game:m.game, name:m.name,
@@ -880,7 +892,9 @@ function formHtml(m, isNew){
     <label for="m_prefix">${tm("mPrefix")}</label><input type="text" id="m_prefix" value="${esc(m.prefix)}" maxlength="80"><p class="hint">${tm("mPrefixH")}</p>
     <label for="m_dsk">${tm("mDsk")}</label><textarea id="m_dsk" maxlength="400">${esc(m.desc.sk)}</textarea>
     <label for="m_den">${tm("mDen")}</label><textarea id="m_den" maxlength="400">${esc(m.desc.en)}</textarea>
-    <label for="m_readme">${tm("mReadme")}</label><textarea id="m_readme" class="tall" spellcheck="false"></textarea><p class="hint">${tm("mReadmeH")}</p>
+    <label for="m_readme">${tm("mReadme")}</label>
+    <label class="mdrop">${tm("mMdDrop")}<input type="file" id="m_mdfile" accept=".md,.markdown,.txt,text/markdown,text/plain" hidden></label><span class="gtag" id="m_mdtag" hidden></span>
+    <textarea id="m_readme" class="tall" spellcheck="false"></textarea><p class="hint">${tm("mReadmeH")}</p>
     <label>${tm("mIcon")}</label><p class="hint" style="margin:0 0 .6rem">${tm("mIconH")}</p>
     ${iconRow(m.icon)}
     <label>${tm("mGal")}</label><p class="hint" style="margin:0 0 .6rem">${tm("mGalH")}</p>
@@ -901,10 +915,22 @@ function drawMods(){
     + `<div class="arow"><button class="abtn" data-a="madd">${tm("mAdd")}</button></div>
        <p class="anote">${tm("mHowDl")}</p><div class="astat" id="mstat"></div></div>` + catsHtml();
 }
+/* nahratie .md súboru do poľa "Dlhý popis": text sa načíta do textarey, uloží sa až tlačidlom Uložiť (rovnako ako ručne napísaný) */
+async function loadMdFile(f){
+  const ta = $id("m_readme"); if (!ta || !f) return;
+  const st = $id("mstat"); if (st) { st.className = "astat"; st.textContent = ""; }
+  if (!/\.(md|markdown|txt)$/i.test(f.name || "")) { mStatus("err", tm("mMdBad")); return; }
+  if (f.size > 1048576) { mStatus("err", tm("mMdBig")); return; }
+  if (ta.value.trim() && !confirm(tm("mMdOver"))) return;
+  try {
+    ta.value = (await f.text()).replace(/^\uFEFF/, "");
+    const tag = $id("m_mdtag"); if (tag) { tag.textContent = `📄 ${f.name} – ${tm("mMdLoaded")}`; tag.hidden = false; }
+  } catch(e){ mStatus("err", tm("mMdBad")); }
+}
 async function startEdit(i){
   const m = adm.mods[i]; adm.edit = {isNew:false, index:i, mod:m}; drawMods();
   const p = m.readme && (m.readme.en || m.readme.sk);
-  if (isRel(p)) { try { const f = await getFile(p); if (f && f.content && $id("m_readme") && adm.edit && adm.edit.mod === m) $id("m_readme").value = unb64(f.content); } catch(e){} }
+  if (isRel(p)) { try { const f = await getFile(p); if (f && f.content && $id("m_readme") && adm.edit && adm.edit.mod === m && !$id("m_readme").value) $id("m_readme").value = unb64(f.content); } catch(e){} }
 }
 async function saveMod(){
   const e = adm.edit; if (!e) return;
